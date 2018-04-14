@@ -4,7 +4,7 @@ namespace Sweetchuck\Robo\Composer\Tests\Unit\Robo\Task;
 
 use ReflectionClass;
 use Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask;
-use Sweetchuck\Robo\Composer\Test\Helper\Dummy\Process as DummyProcess;
+use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 use Codeception\Test\Unit;
 use Codeception\Util\Stub;
 use Robo\Robo;

@@ -9,7 +9,7 @@ class ComposerPackagePathsTask extends ComposerTask implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    protected $taskName = 'Composer package paths';
+    protected $taskName = 'Composer - Package paths';
 
     protected function getAction(): string
     {
