@@ -1,9 +1,8 @@
 <?php
 
-use Consolidation\AnnotatedCommand\CommandData;
+use Robo\State\Data as RoboStateData;
 use Robo\Tasks;
 use Sweetchuck\LintReport\Reporter\BaseReporter;
-use Sweetchuck\LintReport\Reporter\CheckstyleReporter;
 use League\Container\ContainerInterface;
 use Robo\Collection\CollectionBuilder;
 use Sweetchuck\Robo\Git\GitTaskLoader;
@@ -111,24 +110,13 @@ class RoboFile extends Tasks
     }
 
     /**
-     * @hook validate test
-     */
-    public function inputSuitNamesValidateOptionalArg(CommandData $commandData)
-    {
-        $args = $commandData->arguments();
-        $this->validateArgCodeceptionSuiteNames($args['suiteNames']);
-    }
-
-    /**
      * Run the Robo unit tests.
      */
-    public function test(
-        array $suiteNames,
-        array $options = [
-            'debug' => false,
-        ]
-    ): CollectionBuilder {
-        return $this->getTaskCodeceptRunSuites($suiteNames, $options);
+    public function test(array $suiteNames): CollectionBuilder
+    {
+        $this->validateArgCodeceptionSuiteNames($suiteNames);
+
+        return $this->getTaskCodeceptRunSuites($suiteNames);
     }
 
     /**
@@ -169,7 +157,7 @@ class RoboFile extends Tasks
 
         if (!$this->environmentType) {
             if (getenv('CI') === 'true') {
-                // Travis and GitLab.
+                // CircleCI, Travis and GitLab.
                 $this->environmentType = 'ci';
             } elseif (getenv('JENKINS_HOME')) {
                 $this->environmentType = 'ci';
@@ -184,6 +172,8 @@ class RoboFile extends Tasks
                 $this->environmentName = 'gitlab';
             } elseif (getenv('TRAVIS') === 'true') {
                 $this->environmentName = 'travis';
+            } elseif (getenv('CIRCLECI') === 'true') {
+                $this->environmentName = 'circle';
             }
         }
 
@@ -243,19 +233,21 @@ class RoboFile extends Tasks
 
         if (is_readable('codeception.yml')) {
             $this->codeceptionInfo = Yaml::parse(file_get_contents('codeception.yml'));
-        } else {
-            $this->codeceptionInfo = [
-                'paths' => [
-                    'tests' => 'tests',
-                    'log' => 'tests/_output',
-                ],
-            ];
+
+            return $this;
         }
+
+        $this->codeceptionInfo = [
+            'paths' => [
+                'tests' => 'tests',
+                'log' => 'tests/_output',
+            ],
+        ];
 
         return $this;
     }
 
-    protected function getTaskCodeceptRunSuites(array $suiteNames = [], array $options = []): CollectionBuilder
+    protected function getTaskCodeceptRunSuites(array $suiteNames = []): CollectionBuilder
     {
         if (!$suiteNames) {
             $suiteNames = ['all'];
@@ -263,13 +255,13 @@ class RoboFile extends Tasks
 
         $cb = $this->collectionBuilder();
         foreach ($suiteNames as $suiteName) {
-            $cb->addTask($this->getTaskCodeceptRunSuite($suiteName, $options));
+            $cb->addTask($this->getTaskCodeceptRunSuite($suiteName));
         }
 
         return $cb;
     }
 
-    protected function getTaskCodeceptRunSuite(string $suite, array $options = []): CollectionBuilder
+    protected function getTaskCodeceptRunSuite(string $suite): CollectionBuilder
     {
         $this->initCodeceptionInfo();
 
@@ -295,9 +287,6 @@ class RoboFile extends Tasks
 
         $cmdPattern .= ' --ansi';
         $cmdPattern .= ' --verbose';
-        if (!empty($options['debug'])) {
-            $cmdPattern .= ' --debug';
-        }
 
         $cb = $this->collectionBuilder();
         if ($withCoverageHtml) {
@@ -400,48 +389,37 @@ class RoboFile extends Tasks
             ],
         ];
 
-        if ($this->environmentType === 'ci') {
-            $logDir = $this->getLogDir();
-
-            if ($this->environmentName === 'jenkins') {
-                $options['failOn'] = 'never';
-            }
-
-            $options['lintReporters']['lintCheckstyleReporter'] = (new CheckstyleReporter())
-                ->setDestination("$logDir/machine/checkstyle/phpcs.psr2.xml");
+        if ($this->environmentType === 'ci' && $this->environmentName === 'jenkins') {
+            $options['failOn'] = 'never';
+            $options['lintReporters']['lintCheckstyleReporter'] = $this
+                ->getContainer()
+                ->get('lintCheckstyleReporter')
+                ->setDestination('tests/_output/machine/checkstyle/phpcs.psr2.xml');
         }
 
-        if ($this->gitHook !== 'pre-commit') {
-            return $this->taskPhpcsLintFiles($options);
+        if ($this->gitHook === 'pre-commit') {
+            return $this
+                ->collectionBuilder()
+                ->addTask($this
+                    ->taskPhpcsParseXml()
+                    ->setAssetNamePrefix('phpcsXml.'))
+                ->addTask($this
+                    ->taskGitListStagedFiles()
+                    ->setPaths(['*.php' => true])
+                    ->setDiffFilter(['d' => false])
+                    ->setAssetNamePrefix('staged.'))
+                ->addTask($this
+                    ->taskGitReadStagedFiles()
+                    ->setCommandOnly(true)
+                    ->setWorkingDirectory('.')
+                    ->deferTaskConfiguration('setPaths', 'staged.fileNames'))
+                ->addTask($this
+                    ->taskPhpcsLintInput($options)
+                    ->deferTaskConfiguration('setFiles', 'files')
+                    ->deferTaskConfiguration('setIgnore', 'phpcsXml.exclude-patterns'));
         }
 
-        $files = [
-            'src/',
-            'src-dev/Composer/',
-            'tests/_support/',
-            'tests/acceptance/',
-            'tests/unit/',
-            'RoboFile.php',
-        ];
-
-        $options['ignore'] = [
-            'src/GitHooks',
-            '*/.gitignore',
-            '*.rb',
-            '*.scss',
-            '*.txt',
-            '*.yml',
-        ];
-
-        return $this
-            ->collectionBuilder()
-            ->addTask($this
-                ->taskGitReadStagedFiles()
-                ->setCommandOnly(true)
-                ->setPaths($files))
-            ->addTask($this
-                ->taskPhpcsLintInput($options)
-                ->deferTaskConfiguration('setFiles', 'files'));
+        return $this->taskPhpcsLintFiles($options);
     }
 
     protected function isPhpExtensionAvailable(string $extension): bool
@@ -493,11 +471,12 @@ class RoboFile extends Tasks
         return $this->codeceptionSuiteNames;
     }
 
-    /**
-     * @return $this
-     */
-    protected function validateArgCodeceptionSuiteNames(array $suiteNames)
+    protected function validateArgCodeceptionSuiteNames(array $suiteNames): void
     {
+        if (!$suiteNames) {
+            return;
+        }
+
         $invalidSuiteNames = array_diff($suiteNames, $this->getCodeceptionSuiteNames());
         if ($invalidSuiteNames) {
             throw new \InvalidArgumentException(
@@ -505,7 +484,5 @@ class RoboFile extends Tasks
                 1
             );
         }
-
-        return $this;
     }
 }
