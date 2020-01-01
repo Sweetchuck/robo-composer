@@ -1,7 +1,7 @@
 
 # Robo task wrapper for Composer
 
-[![Build Status](https://travis-ci.org/Sweetchuck/robo-composer.svg?branch=master)](https://travis-ci.org/Sweetchuck/robo-composer)
+[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-composer.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-composer)
 [![codecov](https://codecov.io/gh/Sweetchuck/robo-composer/branch/master/graph/badge.svg)](https://codecov.io/gh/Sweetchuck/robo-composer)
 
 @todo

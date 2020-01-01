@@ -2,6 +2,7 @@
 
 namespace Sweetchuck\Robo\Composer;
 
+use League\Container\ContainerAwareInterface;
 use Robo\Collection\CollectionBuilder;
 
 trait ComposerTaskLoader
@@ -11,6 +12,15 @@ trait ComposerTaskLoader
      */
     protected function taskComposerPackagePaths(array $options = []): CollectionBuilder
     {
-        return $this->task(Task\ComposerPackagePathsTask::class, $options);
+        /** @var \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask $task */
+        $task = $this->task(Task\ComposerPackagePathsTask::class, $options);
+        if ($this instanceof ContainerAwareInterface) {
+            $container = $this->getContainer();
+            if ($container) {
+                $task->setContainer($this->getContainer());
+            }
+        }
+
+        return $task;
     }
 }

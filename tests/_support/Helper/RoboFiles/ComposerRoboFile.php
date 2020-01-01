@@ -1,10 +1,13 @@
 <?php
 
+namespace Sweetchuck\Robo\Composer\Test\Helper\RoboFiles;
+
+use Robo\Tasks;
 use Sweetchuck\Robo\Composer\ComposerTaskLoader;
 use Sweetchuck\Robo\Composer\Utils;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
-class ComposerRoboFile extends Robo\Tasks
+class ComposerRoboFile extends Tasks
 {
     use ComposerTaskLoader;
 

@@ -5,19 +5,15 @@ namespace Sweetchuck\Robo\Composer\Tests\Unit\Robo\Task;
 use ReflectionClass;
 use Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
-use Codeception\Test\Unit;
 use Codeception\Util\Stub;
 use Robo\Robo;
+use Sweetchuck\Robo\Composer\Tests\Unit\Task\TaskTestBase;
 
 /**
  * @covers \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask<extended>
  */
-class ComposerPackagePathsTaskTest extends Unit
+class ComposerPackagePathsTaskTest extends TaskTestBase
 {
-    /**
-     * @var \Sweetchuck\Robo\Composer\Test\UnitTester
-     */
-    protected $tester;
 
     /**
      * @return array
@@ -63,91 +59,73 @@ class ComposerPackagePathsTaskTest extends Unit
      */
     public function testGetCommand(string $expected, array $options): void
     {
-        $task = new ComposerPackagePathsTask($options);
+        $task = $this->taskBuilder->taskComposerPackagePaths($options);
         $this->tester->assertEquals($expected, $task->getCommand());
     }
 
     /**
      * @return array
      */
-    public function casesParseOutput()
+    public function casesRunSuccess()
     {
         return [
             'empty' => [
                 [
-                    'packagePaths' => [],
-                ],
-                [],
-                [
-                    'processStdOutput' => '',
-                ],
-            ],
-            'one line' => [
-                [
-                    'packagePaths' => [
-                        'a/b' => 'c',
+                    'assets' => [
+                        'packagePaths' => [],
                     ],
                 ],
                 [],
                 [
-                    'processStdOutput' => implode("\n", [
-                        'a/b c',
-                        ''
-                    ]),
+                    [
+                        'exitCode' => 0,
+                        'stdOutput' => '',
+                        'stdError' => '',
+                    ],
+                ],
+            ],
+            'one line' => [
+                [
+                    'assets' => [
+                        'packagePaths' => [
+                            'a/b' => 'c',
+                        ],
+                    ],
+                ],
+                [],
+                [
+                    [
+                        'exitCode' => 0,
+                        'stdOutput' => implode("\n", [
+                            'a/b c',
+                            ''
+                        ]),
+                        'stdError' => '',
+                    ],
                 ],
             ],
             'more lines with trailing space' => [
                 [
-                    'myPrefix01packagePaths' => [
-                        'a/b' => 'c',
-                        'd/e' => 'f ',
+                    'assets' => [
+                        'myPrefix01packagePaths' => [
+                            'a/b' => 'c',
+                            'd/e' => 'f ',
+                        ],
                     ],
                 ],
                 [
                     'assetNamePrefix' => 'myPrefix01',
                 ],
                 [
-                    'processStdOutput' => implode("\n", [
-                        'a/b c',
-                        'd/e f ',
-                        ''
-                    ]),
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider casesParseOutput
-     */
-    public function testParseOutput(array $expected, array $options, array $propetyValues): void
-    {
-        /** @var \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask $task */
-        $task = Stub::construct(ComposerPackagePathsTask::class, [$options], $propetyValues);
-
-        $class = new ReflectionClass(ComposerPackagePathsTask::class);
-        $parseOutputMethod = $class->getMethod('parseOutput');
-        $parseOutputMethod->setAccessible(true);
-        $assetsProperty = $class->getProperty('assets');
-        $assetsProperty->setAccessible(true);
-
-        $parseOutputMethod->invokeArgs($task, []);
-
-        $this->tester->assertEquals($expected, $assetsProperty->getValue($task));
-    }
-
-    /**
-     * @return array
-     */
-    public function casesRunSuccess(): array
-    {
-        return [
-            'empty' => [
-                [],
-            ],
-            'simple' => [
-                [
-                    'a/b' => 'c',
+                    [
+                        'exitCode' => 0,
+                        'stdOutput' => implode("\n", [
+                            'a/b c',
+                            'd/e f ',
+                            ''
+                        ]),
+                        'stdError' => '',
+                    ],
                 ],
             ],
         ];
@@ -156,69 +134,56 @@ class ComposerPackagePathsTaskTest extends Unit
     /**
      * @dataProvider casesRunSuccess
      */
-    public function testRunSuccess(array $expected): void
+    public function testRunSuccess(array $expected, array $options, array $processProphecy): void
     {
-        $fakeStdOutput = '';
-        foreach ($expected as $packageName => $packagePath) {
-            $fakeStdOutput .= "$packageName $packagePath\n";
-        }
-
-        $container = Robo::createDefaultContainer();
-        Robo::setContainer($container);
-
-        /** @var \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask $task */
-        $task = Stub::construct(
-            ComposerPackagePathsTask::class,
-            [
-                [
-                    'workingDirectory' => 'my-wd',
-                    'assetNamePrefix' => 'myPrefix01.',
-                ],
-            ],
-            [
-                'processClass' => DummyProcess::class,
-            ]
-        );
-
-        $processIndex = count(DummyProcess::$instances);
-        DummyProcess::$prophecy[$processIndex] = [
-            'exitCode' => 0,
-            'stdOutput' => $fakeStdOutput,
-            'stdError' => '',
+        $expected += [
+            'wasSuccessful' => true,
+            'assets' => [],
         ];
 
-        $result = $task->run();
+        DummyProcess::$prophecy = $processProphecy;
 
-        $this->assertEquals(
-            $expected,
-            $result['myPrefix01.packagePaths'],
-            'Package paths in the task result'
+        $result = $this
+            ->taskBuilder
+            ->taskComposerPackagePaths($options)
+            ->run();
+
+        $this->tester->assertSame(
+            $expected['wasSuccessful'],
+            $result->wasSuccessful(),
+            'task exit code'
         );
+
+        $actualAssets = $result->getData();
+        foreach ($expected['assets'] as $key => $expectedValue) {
+            $this->tester->assertArrayHasKey(
+                $key,
+                $actualAssets,
+                "'$key' asset is present"
+            );
+
+            $this->tester->assertSame(
+                $expectedValue,
+                $actualAssets[$key],
+                "$key asset is okay"
+            );
+        }
     }
 
     public function testRunFail(): void
     {
-        $container = Robo::createDefaultContainer();
-        Robo::setContainer($container);
-
-        /** @var \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask $task */
-        $task = Stub::construct(
-            ComposerPackagePathsTask::class,
-            [],
+        DummyProcess::$prophecy = [
             [
-                'processClass' => DummyProcess::class,
-            ]
-        );
-
-        $processIndex = count(DummyProcess::$instances);
-        DummyProcess::$prophecy[$processIndex] = [
-            'exitCode' => 1,
-            'stdOutput' => '',
-            'stdError' => '',
+                'exitCode' => 42,
+                'stdOutput' => '',
+                'stdError' => 'my error message',
+            ],
         ];
+        $task = $this->taskBuilder->taskComposerPackagePaths();
 
         $result = $task->run();
 
-        $this->assertEquals(1, $result->getExitCode());
+        $this->tester->assertSame(42, $result->getExitCode());
+        $this->tester->assertSame('my error message', $result->getMessage());
     }
 }

@@ -2,29 +2,36 @@
 
 namespace Sweetchuck\Robo\Composer\Task;
 
+use League\Container\ContainerAwareInterface;
+use League\Container\ContainerAwareTrait;
+use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
+use Robo\Contract\OutputAwareInterface;
 use Robo\Result;
 use Robo\Task\BaseTask;
 use Robo\TaskInfo;
 use Sweetchuck\Robo\Composer\Utils;
+use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
-abstract class ComposerTask extends BaseTask
+abstract class ComposerCliTask extends BaseTask implements
+    CommandInterface,
+    ContainerAwareInterface,
+    OutputAwareInterface
 {
-    /**
-     * @var array
-     */
-    protected $assets = [];
+
+    use ContainerAwareTrait;
+    use OutputAwareTrait;
 
     /**
      * @var string
      */
-    protected $processClass = Process::class;
+    protected $command = '';
 
     /**
-     * @var \Symfony\Component\Process\Process
+     * @var array
      */
-    protected $process;
+    protected $assets = [];
 
     /**
      * @var int
@@ -169,24 +176,20 @@ abstract class ComposerTask extends BaseTask
      */
     public function setOptions(array $options)
     {
-        foreach ($options as $name => $value) {
-            switch ($name) {
-                case 'envVarComposer':
-                    $this->setEnvVarComposer($value);
-                    break;
+        if (array_key_exists('envVarComposer', $options)) {
+            $this->setEnvVarComposer($options['envVarComposer']);
+        }
 
-                case 'workingDirectory':
-                    $this->setWorkingDirectory($value);
-                    break;
+        if (array_key_exists('workingDirectory', $options)) {
+            $this->setWorkingDirectory($options['workingDirectory']);
+        }
 
-                case 'composerExecutable':
-                    $this->setComposerExecutable($value);
-                    break;
+        if (array_key_exists('composerExecutable', $options)) {
+            $this->setComposerExecutable($options['composerExecutable']);
+        }
 
-                case 'assetNamePrefix':
-                    $this->setAssetNamePrefix($value);
-                    break;
-            }
+        if (array_key_exists('assetNamePrefix', $options)) {
+            $this->setAssetNamePrefix($options['assetNamePrefix']);
         }
 
         return $this;
@@ -198,42 +201,97 @@ abstract class ComposerTask extends BaseTask
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function run(): Result
+    public function run()
     {
-        $command = $this->getCommand();
-        $this->printTaskInfo($command);
-        $this->process = new $this->processClass($command);
+        $this->command = $this->getCommand();
 
-        $this->processExitCode = $this->process->run();
-        $this->processStdOutput = $this->process->getOutput();
-        $this->processStdError = $this->process->getErrorOutput();
-        if ($this->processExitCode) {
-            return new Result(
-                $this,
-                $this->processExitCode,
-                $this->processStdError,
-                $this->assets
-            );
-        }
-
-        $this->assets['workingDirectory'] = $this->getWorkingDirectory();
-        $this->parseOutput();
-
-        return Result::success($this, '', $this->assets);
+        return $this
+            ->runHeader()
+            ->runDoIt()
+            ->runPrepareAssets()
+            ->runReturn();
     }
 
     /**
      * @return $this
      */
-    protected function parseOutput()
+    protected function runHeader()
     {
+        $this->printTaskInfo($this->command);
+
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return $this
+     */
+    public function runDoIt()
+    {
+        $process = $this
+            ->getProcessHelper()
+            ->run(
+                $this->output(),
+                $this->command,
+                null,
+                $this->getProcessRunCallbackWrapper()
+            );
+
+        $this->processExitCode = $process->getExitCode();
+        $this->processStdOutput = $process->getOutput();
+        $this->processStdError = $process->getErrorOutput();
+
+        return $this;
+    }
+
+    protected function runPrepareAssets()
+    {
+        return $this;
+    }
+
+    protected function runReturn(): Result
+    {
+        return new Result(
+            $this,
+            $this->getTaskResultCode(),
+            $this->getTaskResultMessage(),
+            $this->getAssetsWithPrefixedNames()
+        );
+    }
+
+    protected function getTaskResultCode(): int
+    {
+        return $this->processExitCode;
+    }
+
+    protected function getTaskResultMessage(): string
+    {
+        return $this->processStdError;
+    }
+
+    protected function getProcessRunCallbackWrapper(): callable
+    {
+        return function (string $type, string $data): void {
+            $this->processRunCallback($type, $data);
+        };
+    }
+
+    protected function processRunCallback(string $type, string $data): void
+    {
+        switch ($type) {
+            case Process::OUT:
+                $this->output()->write($data);
+                break;
+
+            case Process::ERR:
+                $this->printTaskError($data);
+                break;
+        }
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getCommand(): string
     {
@@ -358,5 +416,30 @@ abstract class ComposerTask extends BaseTask
                 'value' => $this->getComposerExecutable(),
             ],
         ];
+    }
+
+    protected function getAssetsWithPrefixedNames(): array
+    {
+        $prefix = $this->getAssetNamePrefix();
+        if (!$prefix) {
+            return $this->assets;
+        }
+
+        $assets = [];
+        foreach ($this->assets as $key => $value) {
+            $assets["{$prefix}{$key}"] = $value;
+        }
+
+        return $assets;
+    }
+
+    protected function getProcessHelper(): ProcessHelper
+    {
+        // @todo Check that everything is available.
+        return  $this
+            ->getContainer()
+            ->get('application')
+            ->getHelperSet()
+            ->get('process');
     }
 }
