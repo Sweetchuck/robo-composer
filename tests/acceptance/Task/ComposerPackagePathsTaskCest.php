@@ -3,10 +3,14 @@
 namespace Sweetchuck\Robo\Composer\Tests\Acceptance\Robo\Task;
 
 use Sweetchuck\Robo\composer\Test\AcceptanceTester;
+use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
 
 class ComposerPackagePathsTaskCest
 {
-    protected $class = \ComposerRoboFile::class;
+    /**
+     * @var string
+     */
+    protected $class = ComposerRoboFile::class;
 
     protected function id(string $suffix): string
     {
