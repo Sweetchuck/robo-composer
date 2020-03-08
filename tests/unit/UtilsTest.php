@@ -1,12 +1,14 @@
 <?php
 
-namespace Sweetchuck\Robo\Drupal\Tests\Unit;
+declare(strict_types = 1);
+
+namespace Sweetchuck\Robo\Composer\Tests\Unit;
 
 use Sweetchuck\Robo\Composer\Utils;
 use Codeception\Test\Unit;
 
 /**
- * @coversDefaultClass \Sweetchuck\Robo\Composer\Utils
+ * @covers \Sweetchuck\Robo\Composer\Utils
  */
 class UtilsTest extends Unit
 {

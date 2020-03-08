@@ -27,13 +27,16 @@
     },
     "require": {
         "php": ">=7.2",
+        "ext-json": "*",
         "ext-pcre": "*",
-        "consolidation/robo": "^2.0"
+        "consolidation/robo": "^2.0",
+        "sweetchuck/utils": "^0.1",
+        "symfony/filesystem": "^4.0 || ^5.0"
     },
     "require-dev": {
-        "ext-json": "*",
         "codeception/codeception": "^4.0",
         "codeception/module-asserts": "^1.1",
+        "mikey179/vfsstream": "^1.6",
         "squizlabs/php_codesniffer": "^3.5",
         "sweetchuck/codeception-module-robo-task-runner": "^0.7",
         "sweetchuck/git-hooks": "^0.0",

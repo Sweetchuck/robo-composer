@@ -21,6 +21,7 @@ class DummyTaskBuilder implements BuilderAwareInterface, ContainerAwareInterface
     use TaskIO;
     use ComposerTaskLoader {
         taskComposerPackagePaths as public;
+        taskComposerRemoveIndirectDependencies as public;
     }
 
     public function collectionBuilder(): CollectionBuilder

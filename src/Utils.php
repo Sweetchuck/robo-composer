@@ -10,6 +10,9 @@ class Utils
         return dirname(__DIR__);
     }
 
+    /**
+     * @todo Use \Sweetchuck\Utils\Filter\ArrayFilterEnabled.
+     */
     public static function filterEnabled(array $items, string $property = 'enabled'): array
     {
         $filtered = [];

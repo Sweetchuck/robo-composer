@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Composer\Test\Helper\RoboFiles;
 
 use Robo\Tasks;
@@ -11,7 +13,10 @@ class ComposerRoboFile extends Tasks
 {
     use ComposerTaskLoader;
 
-    public function basic(string $composerExecutable): int
+    /**
+     * @command composer:package-paths
+     */
+    public function composerPackagePaths(string $composerExecutable): int
     {
         $result = $this
             ->taskComposerPackagePaths([
