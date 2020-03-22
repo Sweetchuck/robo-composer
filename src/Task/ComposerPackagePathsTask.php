@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Composer\Task;
 
 use Robo\Contract\CommandInterface;

@@ -1,12 +1,14 @@
 <?php
 
-namespace Sweetchuck\Robo\Drupal\Tests\Unit;
+declare(strict_types = 1);
+
+namespace Sweetchuck\Robo\Composer\Tests\Unit;
 
 use Sweetchuck\Robo\Composer\Utils;
 use Codeception\Test\Unit;
 
 /**
- * @coversDefaultClass \Sweetchuck\Robo\Composer\Utils
+ * @covers \Sweetchuck\Robo\Composer\Utils
  */
 class UtilsTest extends Unit
 {
@@ -100,5 +102,76 @@ class UtilsTest extends Unit
     public function testFilterEnabled(array $expected, array $items, string $property = 'enabled'): void
     {
         $this->tester->assertEquals($expected, Utils::filterEnabled($items, $property));
+    }
+
+    public function casesReplaceFileExtension(): array
+    {
+        return [
+            'basic' => ['a.c', 'a.b', 'c'],
+            'schema' => ['foo://a/b/c.e', 'foo://a/b/c.d', 'e'],
+        ];
+    }
+
+    /**
+     * @dataProvider casesReplaceFileExtension
+     */
+    public function testReplaceFileExtension(string $expected, string $fileName, string $newExtension): void
+    {
+        $this->tester->assertSame(
+            $expected,
+            Utils::replaceFileExtension($fileName, $newExtension)
+        );
+    }
+
+    public function casesRemoveIndirectDependencies(): array
+    {
+        return [
+            'basic' => [
+                [
+                    'packages' => [
+                        ['name' => 'a/a'],
+                        ['name' => 'a/b'],
+                        ['name' => 'b/a'],
+                        ['name' => 'b/b'],
+                        ['name' => 'c/a'],
+                        ['name' => 'd/a'],
+                    ],
+                ],
+                [
+                    'require' => [
+                        'a/a' => '*',
+                        'a/b' => '*',
+                        'd/a' => '*',
+                    ],
+                    'require-dev' => [
+                        'b/a' => '*',
+                        'b/b' => '*',
+                        'c/a' => '*',
+                    ],
+                ],
+                [
+                    'packages' => [
+                        ['name' => 'a/a'],
+                        ['name' => 'a/b'],
+                        ['name' => 'a/c'],
+                        ['name' => 'b/a'],
+                        ['name' => 'b/b'],
+                        ['name' => 'b/c'],
+                        ['name' => 'c/a'],
+                        ['name' => 'c/b'],
+                        ['name' => 'd/a'],
+                        ['name' => 'd/b'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesRemoveIndirectDependencies
+     */
+    public function testRemoveIndirectDependencies(array $expected, array $json, array $lock): void
+    {
+        $this->tester->assertSame($expected, Utils::removeIndirectDependencies($json, $lock));
     }
 }

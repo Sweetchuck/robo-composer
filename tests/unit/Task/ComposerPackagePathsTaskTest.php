@@ -1,13 +1,8 @@
 <?php
 
-namespace Sweetchuck\Robo\Composer\Tests\Unit\Robo\Task;
+namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
-use ReflectionClass;
-use Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
-use Codeception\Util\Stub;
-use Robo\Robo;
-use Sweetchuck\Robo\Composer\Tests\Unit\Task\TaskTestBase;
 
 /**
  * @covers \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask<extended>

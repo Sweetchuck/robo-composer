@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Composer\Task;
 
 use League\Container\ContainerAwareInterface;
@@ -165,11 +167,6 @@ abstract class ComposerCliTask extends BaseTask implements
     //endregion
 
     //endregion
-
-    public function __construct(array $options = [])
-    {
-        $this->setOptions($options);
-    }
 
     /**
      * @return $this

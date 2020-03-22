@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Composer;
+
+use Sweetchuck\Utils\Filter\ArrayFilterByPropertyValue;
 
 class Utils
 {
@@ -10,6 +14,9 @@ class Utils
         return dirname(__DIR__);
     }
 
+    /**
+     * @deprecated
+     */
     public static function filterEnabled(array $items, string $property = 'enabled'): array
     {
         $filtered = [];
@@ -27,5 +34,32 @@ class Utils
         }
 
         return $filtered;
+    }
+
+    public static function replaceFileExtension(string $fileName, string $newExtension): string
+    {
+        return preg_replace('/\.[^\.]+$/', ".$newExtension", $fileName);
+    }
+
+    public static function removeIndirectDependencies(array $json, array $lock): array
+    {
+        $keys = [
+            'packages',
+            'packages-dev',
+        ];
+
+        $directDependencies = ($json['require'] ?? []) + ($json['require-dev'] ?: []);
+        $filter = new ArrayFilterByPropertyValue();
+        $filter->setProperty('name');
+        $filter->setAllowedValues($directDependencies);
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $lock)) {
+                continue;
+            }
+
+            $lock[$key] = array_values(array_filter($lock[$key], $filter));
+        }
+
+        return $lock;
     }
 }

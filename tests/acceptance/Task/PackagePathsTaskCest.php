@@ -1,11 +1,13 @@
 <?php
 
-namespace Sweetchuck\Robo\Composer\Tests\Acceptance\Robo\Task;
+declare(strict_types = 1);
+
+namespace Sweetchuck\Robo\Composer\Tests\Acceptance\Task;
 
 use Sweetchuck\Robo\composer\Test\AcceptanceTester;
 use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
 
-class ComposerPackagePathsTaskCest
+class PackagePathsTaskCest
 {
     /**
      * @var string
@@ -17,18 +19,18 @@ class ComposerPackagePathsTaskCest
         return static::class . ":$suffix";
     }
 
-    public function runBasicSuccess(AcceptanceTester $I)
+    public function runPackagePathsBasicSuccess(AcceptanceTester $I)
     {
-        $id = $this->id('basic:composer');
-        $I->runRoboTask($id, $this->class, 'basic', 'composer');
+        $id = $this->id('package-paths:basic:composer');
+        $I->runRoboTask($id, $this->class, 'package-paths:basic', 'composer');
         $I->assertEquals(0, $I->getRoboTaskExitCode($id));
         $I->assertEquals("Success\n", $I->getRoboTaskStdOutput($id));
     }
 
-    public function runBasicFail(AcceptanceTester $I)
+    public function runPackagePathsBasicFail(AcceptanceTester $I)
     {
-        $id = $this->id('basic:false');
-        $I->runRoboTask($id, $this->class, 'basic', 'false');
+        $id = $this->id('package-paths:basic:false');
+        $I->runRoboTask($id, $this->class, 'package-paths:basic', 'false');
         $I->assertEquals(1, $I->getRoboTaskExitCode($id));
         $I->assertContains("Fail\n", $I->getRoboTaskStdError($id));
     }
