@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 
 /**
- * @covers \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask<extended>
+ * @covers \Sweetchuck\Robo\Composer\Task\PackagePathsTask<extended>
  */
-class ComposerPackagePathsTaskTest extends TaskTestBase
+class PackagePathsTaskTest extends TaskTestBase
 {
 
     /**

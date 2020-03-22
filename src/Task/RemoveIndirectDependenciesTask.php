@@ -10,7 +10,7 @@ use RuntimeException;
 use Sweetchuck\Robo\Composer\Utils;
 use Webmozart\PathUtil\Path;
 
-class RemoveIndirectDependencies extends BaseTask
+class RemoveIndirectDependenciesTask extends BaseTask
 {
 
     /**
