@@ -33,7 +33,6 @@
         "sweetchuck/utils": "^0.1.2"
     },
     "require-dev": {
-        "ext-json": "*",
         "codeception/codeception": "^4.0",
         "codeception/module-asserts": "^1.1",
         "mikey179/vfsstream": "^1.6",
