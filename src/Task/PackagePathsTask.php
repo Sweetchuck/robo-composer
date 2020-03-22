@@ -6,7 +6,7 @@ namespace Sweetchuck\Robo\Composer\Task;
 
 use Robo\Contract\CommandInterface;
 
-class ComposerPackagePathsTask extends ComposerCliTask implements CommandInterface
+class PackagePathsTask extends CliTaskBase implements CommandInterface
 {
     /**
      * @inheritdoc

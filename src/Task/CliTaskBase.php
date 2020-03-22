@@ -16,7 +16,7 @@ use Sweetchuck\Robo\Composer\Utils;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
-abstract class ComposerCliTask extends BaseTask implements
+abstract class CliTaskBase extends BaseTask implements
     CommandInterface,
     ContainerAwareInterface,
     OutputAwareInterface

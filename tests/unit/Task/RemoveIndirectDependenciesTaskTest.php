@@ -8,9 +8,9 @@ use org\bovigo\vfs\vfsStream;
 use Webmozart\PathUtil\Path;
 
 /**
- * @covers \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependencies<extended>
+ * @covers \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask<extended>
  */
-class RemoveIndirectDependenciesTest extends TaskTestBase
+class RemoveIndirectDependenciesTaskTest extends TaskTestBase
 {
 
     public function casesRunSuccess(): array

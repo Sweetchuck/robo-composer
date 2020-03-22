@@ -10,12 +10,12 @@ use Robo\Collection\CollectionBuilder;
 trait ComposerTaskLoader
 {
     /**
-     * @return \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask|\Robo\Collection\CollectionBuilder
+     * @return \Sweetchuck\Robo\Composer\Task\PackagePathsTask|\Robo\Collection\CollectionBuilder
      */
     protected function taskComposerPackagePaths(array $options = []): CollectionBuilder
     {
-        /** @var \Sweetchuck\Robo\Composer\Task\ComposerPackagePathsTask $task */
-        $task = $this->task(Task\ComposerPackagePathsTask::class);
+        /** @var \Sweetchuck\Robo\Composer\Task\PackagePathsTask $task */
+        $task = $this->task(Task\PackagePathsTask::class);
         if ($this instanceof ContainerAwareInterface) {
             $container = $this->getContainer();
             if ($container) {
@@ -28,12 +28,12 @@ trait ComposerTaskLoader
         return $task;
     }
     /**
-     * @return \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependencies|\Robo\Collection\CollectionBuilder
+     * @return \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask|\Robo\Collection\CollectionBuilder
      */
     protected function taskComposerRemoveIndirectDependencies(array $options = []): CollectionBuilder
     {
-        /** @var \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependencies $task */
-        $task = $this->task(Task\RemoveIndirectDependencies::class);
+        /** @var \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask $task */
+        $task = $this->task(Task\RemoveIndirectDependenciesTask::class);
         $task->setOptions($options);
 
         return $task;
