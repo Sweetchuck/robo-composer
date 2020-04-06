@@ -10,6 +10,18 @@ use Robo\Collection\CollectionBuilder;
 trait ComposerTaskLoader
 {
     /**
+     * @return \Sweetchuck\Robo\Composer\Task\LockDifferTask|\Robo\Collection\CollectionBuilder
+     */
+    protected function taskComposerLockDiffer(array $options = []): CollectionBuilder
+    {
+        /** @var \Sweetchuck\Robo\Composer\Task\LockDifferTask $task */
+        $task = $this->task(Task\LockDifferTask::class);
+        $task->setOptions($options);
+
+        return $task;
+    }
+
+    /**
      * @return \Sweetchuck\Robo\Composer\Task\PackagePathsTask|\Robo\Collection\CollectionBuilder
      */
     protected function taskComposerPackagePaths(array $options = []): CollectionBuilder
@@ -27,6 +39,7 @@ trait ComposerTaskLoader
 
         return $task;
     }
+
     /**
      * @return \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask|\Robo\Collection\CollectionBuilder
      */

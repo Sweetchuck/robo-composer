@@ -10,13 +10,11 @@ use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
 use Robo\Contract\OutputAwareInterface;
 use Robo\Result;
-use Robo\Task\BaseTask;
-use Robo\TaskInfo;
 use Sweetchuck\Robo\Composer\Utils;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
-abstract class CliTaskBase extends BaseTask implements
+abstract class CliTaskBase extends TaskBase implements
     CommandInterface,
     ContainerAwareInterface,
     OutputAwareInterface
@@ -29,11 +27,6 @@ abstract class CliTaskBase extends BaseTask implements
      * @var string
      */
     protected $command = '';
-
-    /**
-     * @var array
-     */
-    protected $assets = [];
 
     /**
      * @var int
@@ -49,32 +42,6 @@ abstract class CliTaskBase extends BaseTask implements
      * @var string
      */
     protected $processStdError = '';
-
-    /**
-     * @var string
-     */
-    protected $taskName = '';
-
-    public function getTaskName(): string
-    {
-        return $this->taskName ?: TaskInfo::formatTaskName($this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTaskContext($context = null)
-    {
-        if (!$context) {
-            $context = [];
-        }
-
-        if (empty($context['name'])) {
-            $context['name'] = $this->getTaskName();
-        }
-
-        return parent::getTaskContext($context);
-    }
 
     //region Options.
 
@@ -122,28 +89,6 @@ abstract class CliTaskBase extends BaseTask implements
     }
     //endregion
 
-    // region Option - assetNamePrefix.
-    /**
-     * @var string
-     */
-    protected $assetNamePrefix = '';
-
-    public function getAssetNamePrefix(): string
-    {
-        return $this->assetNamePrefix;
-    }
-
-    /**
-     * @return $this
-     */
-    public function setAssetNamePrefix(string $value)
-    {
-        $this->assetNamePrefix = $value;
-
-        return $this;
-    }
-    //endregion
-
     //region Option - envVarComposer.
     /**
      * @var null|string
@@ -173,6 +118,8 @@ abstract class CliTaskBase extends BaseTask implements
      */
     public function setOptions(array $options)
     {
+        parent::setOptions($options);
+
         if (array_key_exists('envVarComposer', $options)) {
             $this->setEnvVarComposer($options['envVarComposer']);
         }
@@ -183,10 +130,6 @@ abstract class CliTaskBase extends BaseTask implements
 
         if (array_key_exists('composerExecutable', $options)) {
             $this->setComposerExecutable($options['composerExecutable']);
-        }
-
-        if (array_key_exists('assetNamePrefix', $options)) {
-            $this->setAssetNamePrefix($options['assetNamePrefix']);
         }
 
         return $this;
@@ -204,11 +147,7 @@ abstract class CliTaskBase extends BaseTask implements
     {
         $this->command = $this->getCommand();
 
-        return $this
-            ->runHeader()
-            ->runDoIt()
-            ->runPrepareAssets()
-            ->runReturn();
+        return parent::run();
     }
 
     /**
@@ -239,11 +178,6 @@ abstract class CliTaskBase extends BaseTask implements
         $this->processStdOutput = $process->getOutput();
         $this->processStdError = $process->getErrorOutput();
 
-        return $this;
-    }
-
-    protected function runPrepareAssets()
-    {
         return $this;
     }
 
@@ -413,21 +347,6 @@ abstract class CliTaskBase extends BaseTask implements
                 'value' => $this->getComposerExecutable(),
             ],
         ];
-    }
-
-    protected function getAssetsWithPrefixedNames(): array
-    {
-        $prefix = $this->getAssetNamePrefix();
-        if (!$prefix) {
-            return $this->assets;
-        }
-
-        $assets = [];
-        foreach ($this->assets as $key => $value) {
-            $assets["{$prefix}{$key}"] = $value;
-        }
-
-        return $assets;
     }
 
     protected function getProcessHelper(): ProcessHelper

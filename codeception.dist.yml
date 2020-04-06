@@ -1,8 +1,6 @@
 
 namespace: Sweetchuck\Robo\Composer\Test
 
-actor: Tester
-
 paths:
     tests: 'tests'
     log: 'tests/_output'
