@@ -1,0 +1,76 @@
+empty:
+    expected: {}
+    lockA: {}
+    lockB: {}
+added:
+    expected:
+        a/b:
+            name: a/b
+            version_old: null
+            version_new: 1.0.0
+            required_as: prod
+    lockA: {}
+    lockB:
+        packages:
+            -
+                name: a/b
+                version: 1.0.0
+removed:
+    expected:
+        a/b:
+            name: a/b
+            version_old: 1.0.0
+            version_new: null
+            required_as: prod
+    lockA:
+        packages:
+            -
+                name: a/b
+                version: 1.0.0
+    lockB: {}
+'changed:version':
+    expected:
+        a/b:
+            name: a/b
+            version_old: 1.0.0
+            version_new: 1.2.3
+            required_as: null
+    lockA:
+        packages:
+            -
+                name: a/b
+                version: 1.0.0
+    lockB:
+        packages:
+            -
+                name: a/b
+                version: 1.2.3
+'changed:moved-to-dev':
+    expected:
+        a/b:
+            name: a/b
+            version_old: null
+            version_new: null
+            required_as: prod to dev
+    lockA:
+        packages:
+            -
+                name: a/b
+                version: 1.0.0
+    lockB:
+        packages-dev:
+            -
+                name: a/b
+                version: 1.0.0
+same:
+    expected: {}
+    lockA:
+        packages:
+            -
+                name: a/b
+                version: 1.0.0
+    lockB:
+        packages:
+            -
+                name: a/b
+                version: 1.0.0

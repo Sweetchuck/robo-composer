@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Test;
 
+use Codeception\Actor;
+
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -19,7 +21,7 @@ namespace Sweetchuck\Robo\Composer\Test;
  *
  * @SuppressWarnings(PHPMD)
 */
-class UnitTester extends \Codeception\Actor
+class UnitTester extends Actor
 {
     use _generated\UnitTesterActions;
 

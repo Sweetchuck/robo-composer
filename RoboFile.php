@@ -445,10 +445,12 @@ class RoboFile extends Tasks
                 ->in($this->codeceptionInfo['paths']['tests'])
                 ->files()
                 ->name('*.suite.yml')
+                ->name('*.suite.dist.yml')
                 ->depth(0);
 
             foreach ($suiteFiles as $suiteFile) {
-                $this->codeceptionSuiteNames[] = $suiteFile->getBasename('.suite.yml');
+                list($suitName) = explode('.', $suiteFile->getBasename());
+                $this->codeceptionSuiteNames[] = $suitName;
             }
         }
 
