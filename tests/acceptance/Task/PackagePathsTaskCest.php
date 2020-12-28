@@ -32,6 +32,6 @@ class PackagePathsTaskCest
         $id = $this->id('package-paths:basic:false');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'false');
         $I->assertEquals(1, $I->getRoboTaskExitCode($id));
-        $I->assertContains("Fail\n", $I->getRoboTaskStdError($id));
+        $I->assertStringContainsString("Fail\n", $I->getRoboTaskStdError($id));
     }
 }

@@ -9,7 +9,7 @@ use Robo\Contract\CommandInterface;
 class PackagePathsTask extends CliTaskBase implements CommandInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $taskName = 'Composer - Package paths';
 
@@ -22,11 +22,11 @@ class PackagePathsTask extends CliTaskBase implements CommandInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function runPrepareAssets()
     {
-        $this->assets['packagePaths'] = [];
+        $this->assets['composer.packagePaths'] = [];
 
         $stdOutput = trim($this->processStdOutput, "\n\r");
         if (!$stdOutput) {
@@ -36,7 +36,7 @@ class PackagePathsTask extends CliTaskBase implements CommandInterface
         $lines = explode("\n", $stdOutput);
         foreach ($lines as $line) {
             $parts = preg_split('/\s+/', $line, 2) + [1 => ''];
-            $this->assets['packagePaths'][$parts[0]] = $parts[1];
+            $this->assets['composer.packagePaths'][$parts[0]] = $parts[1];
         }
 
         return $this;

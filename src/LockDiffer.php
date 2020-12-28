@@ -80,6 +80,7 @@ class LockDiffer
                 null
                 : "{$a['_required-as']} to {$b['_required-as']}",
             // @todo Patches.
+            // @todo Download URL.
         ];
 
         return $this;

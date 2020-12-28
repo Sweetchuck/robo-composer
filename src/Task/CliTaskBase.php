@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Task;
 
+use Consolidation\AnnotatedCommand\Output\OutputAwareInterface;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
 use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
-use Robo\Contract\OutputAwareInterface;
 use Robo\Result;
 use Sweetchuck\Robo\Composer\Utils;
 use Symfony\Component\Console\Helper\ProcessHelper;
@@ -22,6 +22,16 @@ abstract class CliTaskBase extends TaskBase implements
 
     use ContainerAwareTrait;
     use OutputAwareTrait;
+
+    /**
+     * @var string
+     */
+    protected $envExecutable = '/usr/bin/env';
+
+    /**
+     * @var string
+     */
+    protected $shell = 'bash';
 
     /**
      * @var string
@@ -169,7 +179,12 @@ abstract class CliTaskBase extends TaskBase implements
             ->getProcessHelper()
             ->run(
                 $this->output(),
-                $this->command,
+                [
+                    $this->envExecutable,
+                    $this->shell,
+                    '-c',
+                    $this->command,
+                ],
                 null,
                 $this->getProcessRunCallbackWrapper()
             );

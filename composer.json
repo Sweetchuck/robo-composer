@@ -6,10 +6,9 @@
         "robo-tasks",
         "composer"
     ],
-    "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Dávid Andor",
+            "name": "Andor",
             "role": "Maintainer",
             "homepage": "https://github.com/Sweetchuck"
         }
@@ -18,32 +17,35 @@
         "source": "https://github.com/Sweetchuck/robo-composer",
         "issues": "https://github.com/Sweetchuck/robo-composer/issues"
     },
+    "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "bin-dir": "bin",
-        "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
     },
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "ext-json": "*",
         "ext-pcre": "*",
         "consolidation/robo": "^2.0",
-        "sweetchuck/utils": "^0.1.2"
+        "sweetchuck/utils": "^0.3"
     },
     "require-dev": {
         "codeception/codeception": "^4.0",
         "codeception/module-asserts": "^1.1",
         "mikey179/vfsstream": "^1.6",
         "squizlabs/php_codesniffer": "^3.5",
-        "sweetchuck/codeception-module-robo-task-runner": "^0.7",
-        "sweetchuck/git-hooks": "^0.0",
-        "sweetchuck/lint-report": "^0.0",
-        "sweetchuck/robo-git": "^0.2",
-        "sweetchuck/robo-phpcs": "^0.1",
+        "sweetchuck/codeception-module-robo-task-runner": "^0.9",
+        "sweetchuck/git-hooks": "2.x-dev",
+        "sweetchuck/robo-git": "1.x-dev",
+        "sweetchuck/robo-phpcs": "1.x-dev",
         "symfony/error-handler": "^5.0",
-        "symfony/yaml": "^4.0",
+        "symfony/yaml": "^4.0 || ^5.0",
         "webmozart/path-util": "^2.3"
     },
     "autoload": {
@@ -58,13 +60,6 @@
             "Sweetchuck\\Robo\\Composer\\Tests\\Unit\\": "tests/unit/"
         }
     },
-    "scripts": {
-        "post-install-cmd": [
-            "@deploy-git-hooks"
-        ],
-        "post-update-cmd": [
-            "@deploy-git-hooks"
-        ],
-        "deploy-git-hooks": "\\Sweetchuck\\GitHooks\\Composer\\Scripts::deploy"
-    }
+    "scripts": {},
+    "scripts-descriptions": {}
 }

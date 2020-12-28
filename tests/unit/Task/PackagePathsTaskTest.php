@@ -69,7 +69,7 @@ class PackagePathsTaskTest extends TaskTestBase
             'empty' => [
                 [
                     'assets' => [
-                        'packagePaths' => [],
+                        'composer.packagePaths' => [],
                     ],
                 ],
                 [],
@@ -84,7 +84,7 @@ class PackagePathsTaskTest extends TaskTestBase
             'one line' => [
                 [
                     'assets' => [
-                        'packagePaths' => [
+                        'composer.packagePaths' => [
                             'a/b' => 'c',
                         ],
                     ],
@@ -104,14 +104,14 @@ class PackagePathsTaskTest extends TaskTestBase
             'more lines with trailing space' => [
                 [
                     'assets' => [
-                        'myPrefix01packagePaths' => [
+                        'myPrefix01.composer.packagePaths' => [
                             'a/b' => 'c',
                             'd/e' => 'f ',
                         ],
                     ],
                 ],
                 [
-                    'assetNamePrefix' => 'myPrefix01',
+                    'assetNamePrefix' => 'myPrefix01.',
                 ],
                 [
                     [
