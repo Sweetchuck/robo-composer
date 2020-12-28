@@ -78,7 +78,7 @@ class LockDifferTask extends TaskBase
 
     protected function runDoIt()
     {
-        $this->assets['lockDiff'] = (new LockDiffer())->diff($this->getLockA(), $this->getLockB());
+        $this->assets['composer.lockDiff'] = (new LockDiffer())->diff($this->getLockA(), $this->getLockB());
 
         return $this;
     }

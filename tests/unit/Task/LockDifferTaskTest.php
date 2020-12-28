@@ -22,7 +22,7 @@ class LockDifferTaskTest extends TaskTestBase
             $cases[$name] = [
                 [
                     'assets' => [
-                        'lockDiff' => $case['expected'],
+                        'composer.lockDiff' => $case['expected'],
                     ],
                 ],
                 [

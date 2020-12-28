@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Sweetchuck\Robo\Composer\Test\Helper\RoboFiles;
 
 use Consolidation\AnnotatedCommand\CommandResult;
-use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Robo\Tasks;
 use Sweetchuck\Robo\Composer\ComposerTaskLoader;
 use Sweetchuck\Robo\Composer\Utils;
@@ -15,6 +14,14 @@ use Symfony\Component\Yaml\Yaml;
 class ComposerRoboFile extends Tasks
 {
     use ComposerTaskLoader;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function output()
+    {
+        return $this->getContainer()->get('output');
+    }
 
     /**
      * @command package-paths:basic
@@ -29,7 +36,7 @@ class ComposerRoboFile extends Tasks
             ->run();
 
         $stdOutput = $this->output();
-        if ($result->wasSuccessful() && isset($result['packagePaths']['sweetchuck/robo-git'])) {
+        if ($result->wasSuccessful() && isset($result['composer.packagePaths']['sweetchuck/robo-git'])) {
             $stdOutput->writeln('Success');
         } else {
             $stdError = ($stdOutput instanceof ConsoleOutputInterface) ? $stdOutput->getErrorOutput() : $stdOutput;
@@ -86,7 +93,7 @@ class ComposerRoboFile extends Tasks
 
         $this
             ->output()
-            ->write(Yaml::dump($result['lockDiff'], 99, 4));
+            ->write(Yaml::dump($result['composer.lockDiff'], 99, 4));
     }
 
     protected function processFileName(string $fileName): string
