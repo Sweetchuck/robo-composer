@@ -33,7 +33,7 @@
         "ext-json": "*",
         "ext-pcre": "*",
         "consolidation/robo": "^2.0",
-        "sweetchuck/utils": "^0.3"
+        "sweetchuck/utils": "1.x-dev"
     },
     "require-dev": {
         "codeception/codeception": "^4.0",

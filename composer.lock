@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f866fc6b26b2a67c6f6286816056740",
+    "content-hash": "468795ed708879b51186939c5612368a",
     "packages": [
         {
             "name": "consolidation/annotated-command",
@@ -761,16 +761,16 @@
         },
         {
             "name": "sweetchuck/utils",
-            "version": "v0.3.0",
+            "version": "1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sweetchuck/utils.git",
-                "reference": "701e5650827ea5f46642b57334cadaffa51dbc97"
+                "reference": "fb886b24558c21db18c59359bb7cb71ba2f4b3e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sweetchuck/utils/zipball/701e5650827ea5f46642b57334cadaffa51dbc97",
-                "reference": "701e5650827ea5f46642b57334cadaffa51dbc97",
+                "url": "https://api.github.com/repos/Sweetchuck/utils/zipball/fb886b24558c21db18c59359bb7cb71ba2f4b3e6",
+                "reference": "fb886b24558c21db18c59359bb7cb71ba2f4b3e6",
                 "shasum": ""
             },
             "require": {
@@ -791,6 +791,7 @@
                 "sweetchuck/robo-phpcs": "^0.2",
                 "sweetchuck/robo-phpmd": "^0.2"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -804,9 +805,9 @@
             "description": "Common utils",
             "support": {
                 "issues": "https://github.com/Sweetchuck/utils/issues",
-                "source": "https://github.com/Sweetchuck/utils/tree/v0.3.0"
+                "source": "https://github.com/Sweetchuck/utils/tree/1.x"
             },
-            "time": "2020-12-26T19:57:23+00:00"
+            "time": "2020-12-29T17:44:53+00:00"
         },
         {
             "name": "symfony/console",
@@ -2208,16 +2209,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.13",
+            "version": "4.1.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "e817f83fe019ed3f9c280254b88f90cc70c3d7cf"
+                "reference": "bf2d7861cc6cf4e118a21c6945f482a5c822636c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/e817f83fe019ed3f9c280254b88f90cc70c3d7cf",
-                "reference": "e817f83fe019ed3f9c280254b88f90cc70c3d7cf",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/bf2d7861cc6cf4e118a21c6945f482a5c822636c",
+                "reference": "bf2d7861cc6cf4e118a21c6945f482a5c822636c",
                 "shasum": ""
             },
             "require": {
@@ -2291,7 +2292,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/4.1.13"
+                "source": "https://github.com/Codeception/Codeception/tree/4.1.14"
             },
             "funding": [
                 {
@@ -2299,7 +2300,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2020-12-20T13:35:09+00:00"
+            "time": "2020-12-28T19:16:28+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -5252,6 +5253,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "sweetchuck/utils": 20,
         "sweetchuck/git-hooks": 20,
         "sweetchuck/robo-git": 20,
         "sweetchuck/robo-phpcs": 20
