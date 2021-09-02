@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
+use League\Container\Container as LeagueContainer;
 use Robo\Tasks;
-use Sweetchuck\LintReport\Reporter\BaseReporter;
-use League\Container\ContainerInterface;
 use Robo\Collection\CollectionBuilder;
+use Sweetchuck\LintReport\Reporter\BaseReporter;
 use Sweetchuck\Robo\Git\GitTaskLoader;
 use Sweetchuck\Robo\Phpcs\PhpcsTaskLoader;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -18,59 +20,34 @@ class RoboFile extends Tasks
     use GitTaskLoader;
     use PhpcsTaskLoader;
 
-    /**
-     * @var array
-     */
-    protected $composerInfo = [];
+    protected array $composerInfo = [];
 
-    /**
-     * @var array
-     */
-    protected $codeceptionInfo = [];
+    protected array $codeceptionInfo = [];
 
     /**
      * @var string[]
      */
-    protected $codeceptionSuiteNames = [];
+    protected array $codeceptionSuiteNames = [];
 
-    /**
-     * @var string
-     */
-    protected $packageVendor = '';
+    protected string $packageVendor = '';
 
-    /**
-     * @var string
-     */
-    protected $packageName = '';
+    protected string $packageName = '';
 
-    /**
-     * @var string
-     */
-    protected $binDir = 'vendor/bin';
+    protected string $binDir = 'vendor/bin';
 
-    /**
-     * @var string
-     */
-    protected $gitHook = '';
+    protected string $gitHook = '';
 
-    /**
-     * @var string
-     */
-    protected $envVarNamePrefix = '';
+    protected string $envVarNamePrefix = '';
 
     /**
      * Allowed values: dev, ci, prod.
-     *
-     * @var string
      */
-    protected $environmentType = '';
+    protected string $environmentType = '';
 
     /**
      * Allowed values: local, jenkins, travis.
-     *
-     * @var string
      */
-    protected $environmentName = '';
+    protected string $environmentName = '';
 
     /**
      * RoboFile constructor.
@@ -85,17 +62,31 @@ class RoboFile extends Tasks
     }
 
     /**
-     * {@inheritdoc}
+     * @hook pre-command @initLintReporters
      */
-    public function setContainer(ContainerInterface $container)
+    public function initLintReporters()
     {
-        BaseReporter::lintReportConfigureContainer($container);
+        $lintServices = BaseReporter::getServices();
+        $container = $this->getContainer();
+        foreach ($lintServices as $name => $class) {
+            if ($container->has($name)) {
+                continue;
+            }
 
-        return parent::setContainer($container);
+            if ($container instanceof LeagueContainer) {
+                $container->share($name, $class);
+            }
+        }
     }
 
     /**
      * Git "pre-commit" hook callback.
+     *
+     * @command githook:pre-commit
+     *
+     * @hidden
+     *
+     * @initLintReporters
      */
     public function githookPreCommit(): CollectionBuilder
     {
@@ -110,6 +101,8 @@ class RoboFile extends Tasks
 
     /**
      * Run the Robo unit tests.
+     *
+     * @command test
      */
     public function test(array $suiteNames): CollectionBuilder
     {
@@ -120,6 +113,10 @@ class RoboFile extends Tasks
 
     /**
      * Run code style checkers.
+     *
+     * @command lint
+     *
+     * @initLintReporters
      */
     public function lint(): CollectionBuilder
     {
@@ -151,8 +148,8 @@ class RoboFile extends Tasks
      */
     protected function initEnvironmentTypeAndName()
     {
-        $this->environmentType = getenv($this->getEnvVarName('environment_type'));
-        $this->environmentName = getenv($this->getEnvVarName('environment_name'));
+        $this->environmentType = (string) getenv($this->getEnvVarName('environment_type'));
+        $this->environmentName = (string) getenv($this->getEnvVarName('environment_name'));
 
         if (!$this->environmentType) {
             if (getenv('CI') === 'true') {
@@ -207,11 +204,12 @@ class RoboFile extends Tasks
      */
     protected function initComposerInfo()
     {
-        if ($this->composerInfo || !is_readable('composer.json')) {
+        $composerFileName = getenv('COMPOSER') ?: 'composer.json';
+        if ($this->composerInfo || !is_readable($composerFileName)) {
             return $this;
         }
 
-        $this->composerInfo = json_decode(file_get_contents('composer.json'), true);
+        $this->composerInfo = json_decode(file_get_contents($composerFileName), true);
         list($this->packageVendor, $this->packageName) = explode('/', $this->composerInfo['name']);
 
         if (!empty($this->composerInfo['config']['bin-dir'])) {
@@ -264,11 +262,11 @@ class RoboFile extends Tasks
     {
         $this->initCodeceptionInfo();
 
-        $withCoverageHtml = in_array($this->environmentType, ['dev']);
-        $withCoverageXml = in_array($this->environmentType, ['ci']);
+        $withCoverageHtml = $this->environmentType === 'dev';
+        $withCoverageXml = $this->environmentType === 'ci';
 
-        $withUnitReportHtml = in_array($this->environmentType, ['dev']);
-        $withUnitReportXml = in_array($this->environmentType, ['ci']);
+        $withUnitReportHtml = $this->environmentType === 'dev';
+        $withUnitReportXml = $this->environmentType === 'ci';
 
         $logDir = $this->getLogDir();
 
@@ -360,6 +358,7 @@ class RoboFile extends Tasks
                     ]
                 ));
                 $process = Process::fromShellCommandline($command, null, null, null, null);
+
                 return $process->run(function ($type, $data) {
                     switch ($type) {
                         case Process::OUT:
@@ -440,7 +439,6 @@ class RoboFile extends Tasks
         if (!$this->codeceptionSuiteNames) {
             $this->initCodeceptionInfo();
 
-            /** @var \Symfony\Component\Finder\Finder $suiteFiles */
             $suiteFiles = Finder::create()
                 ->in($this->codeceptionInfo['paths']['tests'])
                 ->files()
@@ -467,7 +465,7 @@ class RoboFile extends Tasks
         if ($invalidSuiteNames) {
             throw new InvalidArgumentException(
                 'The following Codeception suite names are invalid: ' . implode(', ', $invalidSuiteNames),
-                1
+                1,
             );
         }
     }
