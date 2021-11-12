@@ -11,10 +11,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class LockDifferTaskCest
 {
-    /**
-     * @var string
-     */
-    protected $class = ComposerRoboFile::class;
+    protected string $class = ComposerRoboFile::class;
 
     protected function id(string $suffix): string
     {

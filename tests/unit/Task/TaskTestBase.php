@@ -6,42 +6,29 @@ namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
 use Codeception\Test\Unit;
 use League\Container\Container as LeagueContainer;
+use Psr\Container\ContainerInterface;
 use Robo\Collection\CollectionBuilder;
-use Robo\Config\Config;
+use Robo\Config\Config as RoboConfig;
 use Robo\Robo;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcessHelper;
 use Sweetchuck\Robo\Composer\Test\Helper\Dummy\DummyTaskBuilder;
+use Sweetchuck\Robo\Composer\Test\UnitTester;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\ErrorHandler\BufferingLogger;
 
 class TaskTestBase extends Unit
 {
-    /**
-     * @var \Sweetchuck\Robo\Composer\Test\UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
-    /**
-     * @var \League\Container\ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
-    /**
-     * @var \Robo\Config
-     */
-    protected $config;
+    protected RoboConfig $config;
 
-    /**
-     * @var \Robo\Collection\CollectionBuilder
-     */
-    protected $builder;
+    protected CollectionBuilder $builder;
 
-    /**
-     * @var \Sweetchuck\Robo\Composer\Test\Helper\Dummy\DummyTaskBuilder
-     */
-    protected $taskBuilder;
+    protected DummyTaskBuilder $taskBuilder;
 
     /**
      * @SuppressWarnings("CamelCaseMethodName")
@@ -56,7 +43,7 @@ class TaskTestBase extends Unit
         $this->container = new LeagueContainer();
         $application = new SymfonyApplication('Sweetchuck - Robo Composer', '1.0.0');
         $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
-        $this->config = (new Config());
+        $this->config = (new RoboConfig());
         $input = null;
         $output = new DummyOutput([
             'verbosity' => DummyOutput::VERBOSITY_DEBUG,

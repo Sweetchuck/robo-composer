@@ -11,11 +11,8 @@ class PackagePathsTask extends CliTaskBase implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    protected $taskName = 'Composer - Package paths';
+    protected string $taskName = 'Composer - Package paths';
 
-    /**
-     * @inheritdoc
-     */
     protected function getAction(): string
     {
         return 'show -P';

@@ -9,10 +9,7 @@ use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
 
 class PackagePathsTaskCest
 {
-    /**
-     * @var string
-     */
-    protected $class = ComposerRoboFile::class;
+    protected string $class = ComposerRoboFile::class;
 
     protected function id(string $suffix): string
     {
@@ -24,7 +21,7 @@ class PackagePathsTaskCest
         $id = $this->id('package-paths:basic:composer');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'composer');
         $I->assertEquals(0, $I->getRoboTaskExitCode($id));
-        $I->assertEquals("Success\n", $I->getRoboTaskStdOutput($id));
+        $I->assertStringEndsWith("\nSuccess\n", $I->getRoboTaskStdOutput($id));
     }
 
     public function runPackagePathsBasicFail(AcceptanceTester $I)
@@ -32,6 +29,6 @@ class PackagePathsTaskCest
         $id = $this->id('package-paths:basic:false');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'false');
         $I->assertEquals(1, $I->getRoboTaskExitCode($id));
-        $I->assertStringContainsString("Fail\n", $I->getRoboTaskStdError($id));
+        $I->assertStringContainsString("\nFail\n", $I->getRoboTaskStdError($id));
     }
 }

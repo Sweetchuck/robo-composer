@@ -2,7 +2,6 @@
 
 declare(strict_types = 1);
 
-
 namespace Sweetchuck\Robo\Composer\Task;
 
 use Robo\Result;
@@ -12,15 +11,9 @@ use Robo\TaskInfo;
 abstract class TaskBase extends BaseTask
 {
 
-    /**
-     * @var array
-     */
-    protected $assets = [];
+    protected array $assets = [];
 
-    /**
-     * @var string
-     */
-    protected $taskName = '';
+    protected string $taskName = '';
 
     public function getTaskName(): string
     {
@@ -44,10 +37,7 @@ abstract class TaskBase extends BaseTask
     }
 
     // region Option - assetNamePrefix.
-    /**
-     * @var string
-     */
-    protected $assetNamePrefix = '';
+    protected string $assetNamePrefix = '';
 
     public function getAssetNamePrefix(): string
     {
@@ -99,6 +89,9 @@ abstract class TaskBase extends BaseTask
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     abstract protected function runDoIt();
 
     protected function runPrepareAssets()

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
+use League\Container\Container as LeagueContainer;
 use Robo\Tasks;
 use Sweetchuck\LintReport\Reporter\BaseReporter;
-use League\Container\ContainerInterface;
 use Robo\Collection\CollectionBuilder;
 use Sweetchuck\Robo\Git\GitTaskLoader;
 use Sweetchuck\Robo\Phpcs\PhpcsTaskLoader;
@@ -18,59 +20,34 @@ class RoboFile extends Tasks
     use GitTaskLoader;
     use PhpcsTaskLoader;
 
-    /**
-     * @var array
-     */
-    protected $composerInfo = [];
+    protected array $composerInfo = [];
 
-    /**
-     * @var array
-     */
-    protected $codeceptionInfo = [];
+    protected array $codeceptionInfo = [];
 
     /**
      * @var string[]
      */
-    protected $codeceptionSuiteNames = [];
+    protected array $codeceptionSuiteNames = [];
 
-    /**
-     * @var string
-     */
-    protected $packageVendor = '';
+    protected string $packageVendor = '';
 
-    /**
-     * @var string
-     */
-    protected $packageName = '';
+    protected string $packageName = '';
 
-    /**
-     * @var string
-     */
-    protected $binDir = 'vendor/bin';
+    protected string $binDir = 'vendor/bin';
 
-    /**
-     * @var string
-     */
-    protected $gitHook = '';
+    protected string $gitHook = '';
 
-    /**
-     * @var string
-     */
-    protected $envVarNamePrefix = '';
+    protected string $envVarNamePrefix = '';
 
     /**
      * Allowed values: dev, ci, prod.
-     *
-     * @var string
      */
-    protected $environmentType = '';
+    protected string $environmentType = '';
 
     /**
      * Allowed values: local, jenkins, travis.
-     *
-     * @var string
      */
-    protected $environmentName = '';
+    protected string $environmentName = '';
 
     /**
      * RoboFile constructor.
@@ -85,17 +62,30 @@ class RoboFile extends Tasks
     }
 
     /**
-     * {@inheritdoc}
+     * @hook pre-command @initLintReporters
      */
-    public function setContainer(ContainerInterface $container)
+    public function initLintReporters()
     {
-        BaseReporter::lintReportConfigureContainer($container);
+        $lintServices = BaseReporter::getServices();
+        $container = $this->getContainer();
 
-        return parent::setContainer($container);
+        foreach ($lintServices as $name => $class) {
+            if ($container->has($name)) {
+                continue;
+            }
+
+            if ($container instanceof LeagueContainer) {
+                $container->share($name, $class);
+            }
+        }
     }
 
     /**
      * Git "pre-commit" hook callback.
+     *
+     * @command githook:pre-commit
+     *
+     * @initLintReporters
      */
     public function githookPreCommit(): CollectionBuilder
     {
@@ -110,6 +100,8 @@ class RoboFile extends Tasks
 
     /**
      * Run the Robo unit tests.
+     *
+     * @command test
      */
     public function test(array $suiteNames): CollectionBuilder
     {
@@ -120,6 +112,10 @@ class RoboFile extends Tasks
 
     /**
      * Run code style checkers.
+     *
+     * @command lint
+     *
+     * @initLintReporters
      */
     public function lint(): CollectionBuilder
     {
@@ -151,8 +147,8 @@ class RoboFile extends Tasks
      */
     protected function initEnvironmentTypeAndName()
     {
-        $this->environmentType = getenv($this->getEnvVarName('environment_type'));
-        $this->environmentName = getenv($this->getEnvVarName('environment_name'));
+        $this->environmentType = getenv($this->getEnvVarName('environment_type')) ?: '';
+        $this->environmentName = getenv($this->getEnvVarName('environment_name')) ?: '';
 
         if (!$this->environmentType) {
             if (getenv('CI') === 'true') {

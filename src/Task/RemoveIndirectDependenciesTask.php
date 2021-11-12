@@ -13,16 +13,10 @@ use Webmozart\PathUtil\Path;
 class RemoveIndirectDependenciesTask extends BaseTask
 {
 
-    /**
-     * @var int
-     */
-    protected $jsonEncodeOptions = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+    protected int $jsonEncodeOptions = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
 
     // region workingDirectory
-    /**
-     * @var string
-     */
-    protected $workingDirectory = '.';
+    protected string $workingDirectory = '.';
 
     public function getWorkingDirectory(): string
     {
@@ -41,10 +35,7 @@ class RemoveIndirectDependenciesTask extends BaseTask
     // endregion
 
     // region composerJsonFileName
-    /**
-     * @var string
-     */
-    protected $composerJsonFileName = '';
+    protected string $composerJsonFileName = '';
 
     public function getComposerJsonFileName(): string
     {
@@ -80,7 +71,7 @@ class RemoveIndirectDependenciesTask extends BaseTask
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {

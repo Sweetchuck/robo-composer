@@ -6,6 +6,7 @@ namespace Sweetchuck\Robo\Composer\Tests\Unit;
 
 use Codeception\Test\Unit;
 use Sweetchuck\Robo\Composer\LockDiffer;
+use Sweetchuck\Robo\Composer\Test\UnitTester;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -14,10 +15,7 @@ use Symfony\Component\Yaml\Yaml;
 class LockDifferTest extends Unit
 {
 
-    /**
-     * @var \Sweetchuck\Robo\Composer\Test\UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
     public function casesDiff(): array
     {

@@ -12,10 +12,7 @@ use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 class PackagePathsTaskTest extends TaskTestBase
 {
 
-    /**
-     * @return array
-     */
-    public function casesGetCommand()
+    public function casesGetCommand(): array
     {
         return [
             'defaults' => [
@@ -60,10 +57,7 @@ class PackagePathsTaskTest extends TaskTestBase
         $this->tester->assertEquals($expected, $task->getCommand());
     }
 
-    /**
-     * @return array
-     */
-    public function casesRunSuccess()
+    public function casesRunSuccess(): array
     {
         return [
             'empty' => [

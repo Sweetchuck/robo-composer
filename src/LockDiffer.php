@@ -7,10 +7,7 @@ namespace Sweetchuck\Robo\Composer;
 class LockDiffer
 {
 
-    /**
-     * @var array
-     */
-    protected $diff = [];
+    protected array $diff = [];
 
     public function diff(array $a, array $b): array
     {
@@ -91,7 +88,7 @@ class LockDiffer
         return $a['version'] !== $b['version'] || $a['_required-as'] !== $b['_required-as'];
     }
 
-    protected function normalizePackages($lock): array
+    protected function normalizePackages(array $lock): array
     {
         $packages = [];
         foreach (['packages' => 'prod', 'packages-dev' => 'dev'] as $key => $requiredAs) {

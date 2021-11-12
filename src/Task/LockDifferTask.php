@@ -12,13 +12,10 @@ class LockDifferTask extends TaskBase
     /**
      * {@inheritdoc}
      */
-    protected $taskName = 'Composer - lock differ';
+    protected string $taskName = 'Composer - lock differ';
 
     // region lockA
-    /**
-     * @var array
-     */
-    protected $lockA = [];
+    protected array $lockA = [];
 
     public function getLockA(): array
     {
@@ -37,10 +34,7 @@ class LockDifferTask extends TaskBase
     // endregion
 
     // region lockB
-    /**
-     * @var array
-     */
-    protected $lockB = [];
+    protected array $lockB = [];
 
     public function getLockB(): array
     {
@@ -76,6 +70,9 @@ class LockDifferTask extends TaskBase
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function runDoIt()
     {
         $this->assets['composer.lockDiff'] = (new LockDiffer())->diff($this->getLockA(), $this->getLockB());

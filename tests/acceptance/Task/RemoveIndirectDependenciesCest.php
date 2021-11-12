@@ -12,10 +12,7 @@ use Webmozart\PathUtil\Path;
 
 class RemoveIndirectDependenciesCest
 {
-    /**
-     * @var string
-     */
-    protected $class = ComposerRoboFile::class;
+    protected string $class = ComposerRoboFile::class;
 
     protected function id(string $suffix): string
     {

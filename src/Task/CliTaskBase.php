@@ -23,43 +23,22 @@ abstract class CliTaskBase extends TaskBase implements
     use ContainerAwareTrait;
     use OutputAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $envExecutable = '/usr/bin/env';
+    protected string $envExecutable = '/usr/bin/env';
 
-    /**
-     * @var string
-     */
-    protected $shell = 'bash';
+    protected string $shell = 'bash';
 
-    /**
-     * @var string
-     */
-    protected $command = '';
+    protected string $command = '';
 
-    /**
-     * @var int
-     */
-    protected $processExitCode = 0;
+    protected int $processExitCode = 0;
 
-    /**
-     * @var string
-     */
-    protected $processStdOutput = '';
+    protected string $processStdOutput = '';
 
-    /**
-     * @var string
-     */
-    protected $processStdError = '';
+    protected string $processStdError = '';
 
     //region Options.
 
     //region Option - workingDirectory
-    /**
-     * @var string
-     */
-    public $workingDirectory = '';
+    public string $workingDirectory = '';
 
     public function getWorkingDirectory(): string
     {
@@ -78,10 +57,7 @@ abstract class CliTaskBase extends TaskBase implements
     // endregion
 
     //region Option - composerExecutable
-    /**
-     * @var string
-     */
-    public $composerExecutable = 'composer';
+    public string $composerExecutable = 'composer';
 
     public function getComposerExecutable(): string
     {
@@ -100,10 +76,7 @@ abstract class CliTaskBase extends TaskBase implements
     //endregion
 
     //region Option - envVarComposer.
-    /**
-     * @var null|string
-     */
-    protected $envVarComposer = null;
+    protected ?string $envVarComposer = null;
 
     public function getEnvVarComposer(): ?string
     {
@@ -151,7 +124,7 @@ abstract class CliTaskBase extends TaskBase implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {
@@ -189,7 +162,7 @@ abstract class CliTaskBase extends TaskBase implements
                 $this->getProcessRunCallbackWrapper()
             );
 
-        $this->processExitCode = $process->getExitCode();
+        $this->processExitCode = (int) $process->getExitCode();
         $this->processStdOutput = $process->getOutput();
         $this->processStdError = $process->getErrorOutput();
 
@@ -237,7 +210,7 @@ abstract class CliTaskBase extends TaskBase implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCommand(): string
     {

@@ -12,10 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 class LockDifferTaskTest extends TaskTestBase
 {
 
-    /**
-     * @return array
-     */
-    public function casesRunSuccess()
+    public function casesRunSuccess(): array
     {
         $cases = [];
         foreach (Yaml::parseFile(codecept_data_dir('lockDiffer/cases.yml')) as $name => $case) {
