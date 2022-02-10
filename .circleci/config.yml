@@ -70,7 +70,7 @@ commands:
                 run:
                     name: 'Run linters'
                     command: |
-                        bin/robo lint
+                        "$(composer config bin-dir)/robo" lint
 
     test:
         description: 'Run tests'
@@ -79,7 +79,7 @@ commands:
                 run:
                     name: 'Codeception - unit'
                     command: |
-                        bin/robo test unit
+                        "$(composer config bin-dir)/robo" test unit
             -
                 codecov/upload:
                     flags: 'unit'
@@ -88,7 +88,7 @@ commands:
                 run:
                     name: 'Codeception - acceptance'
                     command: |
-                        bin/robo test acceptance
+                        "$(composer config bin-dir)/robo" test acceptance
             -
                 codecov/upload:
                     flags: 'acceptance'

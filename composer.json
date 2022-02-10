@@ -24,7 +24,6 @@
         "allow-plugins": {
             "sweetchuck/git-hooks": true
         },
-        "bin-dir": "bin",
         "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
