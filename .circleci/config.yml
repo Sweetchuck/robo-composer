@@ -4,11 +4,8 @@ version: 2.1
 orbs:
     codecov: 'codecov/codecov@3.0.0'
 
-.env_common: &env_common
+.env_app: &env_app
     SHELL: '/bin/bash'
-
-.env_xdebug: &env_xdebug
-    XDEBUG_MODE: 'coverage'
 
 .env_composer: &env_composer
     COMPOSER_NO_INTERACTION: '1'
@@ -18,50 +15,76 @@ orbs:
 
 executors:
     php_min:
+        resource_class: 'small'
         environment:
-            <<: *env_common
-            <<: *env_xdebug
+            <<: *env_app
             <<: *env_composer
 
         docker:
             -
                 name: 'main'
-                image: 'sweetchuck/circleci-php:7.4'
-
+                image: 'circleci/php:7.4'
     php_plus1:
+        resource_class: 'small'
         environment:
-            <<: *env_common
-            <<: *env_xdebug
+            <<: *env_app
             <<: *env_composer
 
         docker:
             -
                 name: 'main'
-                image: 'sweetchuck/circleci-php:8.0'
+                image: 'circleci/php:8.0'
+    php_plus2:
+        resource_class: 'small'
+        environment:
+            <<: *env_app
+            <<: *env_composer
+
+        docker:
+            -
+                name: 'main'
+                image: 'cimg/php:8.1'
 
 commands:
+    install_php_extension_pcov:
+        description: 'Install PCOV PHP extension'
+        steps:
+            -
+                run:
+                    name: 'Install PCOV PHP extension - pecl install pcov'
+                    command: |
+                        if php -m | grep pcov ; then
+                            exit 0
+                        fi
+
+                        sudo pecl install pcov
+                        if php -m | grep pcov ; then
+                            exit 0
+                        fi
+
+                        scanDir="$(php -i | grep --color=never --only-matching --perl-regexp '(?<=^Scan this dir for additional \.ini files => ).+')"
+                        echo 'extension=pcov' | sudo tee "${scanDir}/pcov.ini"
+                        php -m
+
     composer_install:
         description: 'Install Composer dependencies with cache restore and save'
         steps:
             -
                 restore_cache:
-                    name: 'Composer - cache restore'
+                    name: 'Composer - Composer restore'
                     keys:
-                        - 'composer-{{ checksum "./composer.lock" }}-1'
-
+                        - 'composer-{{ checksum "./composer.lock" }}-2'
             -
                 run:
                     name: 'Composer - install'
                     command: |
-                        composer install --no-progress
-
+                        composer install --no-progress --ansi
             -
                 save_cache:
-                    name: 'Composer - cache save'
-                    key: 'composer-{{ checksum "./composer.lock" }}-1'
+                    name: 'Composer - Composer save'
+                    key: 'composer-{{ checksum "./composer.lock" }}-2'
                     paths:
-                        - '~/.cache/composer'
-
+                        - '~/.cache/composer/'
 
     lint:
         description: 'Run linters'
@@ -70,7 +93,7 @@ commands:
                 run:
                     name: 'Run linters'
                     command: |
-                        bin/robo lint
+                        "$(composer config bin-dir)/robo" --ansi lint
 
     test:
         description: 'Run tests'
@@ -79,24 +102,21 @@ commands:
                 run:
                     name: 'Codeception - unit'
                     command: |
-                        bin/robo test unit
-            -
-                codecov/upload:
+                        "$(composer config bin-dir)/robo" --ansi test unit
+            -   codecov/upload:
                     flags: 'unit'
-                    file: './tests/_output/machine/coverage/unit/coverage.xml'
+                    file: './tests/_log/machine/coverage/unit/coverage.xml'
             -
                 run:
                     name: 'Codeception - acceptance'
                     command: |
-                        bin/robo test acceptance
-            -
-                codecov/upload:
+                        "$(composer config bin-dir)/robo" --ansi test acceptance
+            -   codecov/upload:
                     flags: 'acceptance'
-                    file: './tests/_output/machine/coverage/acceptance/coverage.xml'
-            -
-                store_test_results:
+                    file: './tests/_log/machine/coverage/unit/coverage.xml'
+            -   store_test_results:
                     name: 'Store unit test results'
-                    path: './tests/_output/machine/junit'
+                    path: './tests/_log/machine/junit'
 
 jobs:
     build:
@@ -117,6 +137,7 @@ jobs:
         working_directory: '~/repo'
         steps:
             - 'checkout'
+            - 'install_php_extension_pcov'
             - 'composer_install'
             - 'test'
     test_php_plus1:
@@ -124,6 +145,15 @@ jobs:
         working_directory: '~/repo'
         steps:
             - 'checkout'
+            - 'install_php_extension_pcov'
+            - 'composer_install'
+            - 'test'
+    test_php_plus2:
+        executor: 'php_plus2'
+        working_directory: '~/repo'
+        steps:
+            - 'checkout'
+            - 'install_php_extension_pcov'
             - 'composer_install'
             - 'test'
 
@@ -142,5 +172,9 @@ workflows:
                         - 'build'
             -
                 test_php_plus1:
+                    requires:
+                        - 'build'
+            -
+                test_php_plus2:
                     requires:
                         - 'build'
