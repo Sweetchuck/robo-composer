@@ -21,6 +21,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "allow-plugins": {
+            "sweetchuck/git-hooks": true
+        },
         "bin-dir": "bin",
         "optimize-autoloader": true,
         "preferred-install": {

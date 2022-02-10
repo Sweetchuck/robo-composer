@@ -9,6 +9,7 @@ use Robo\Tasks;
 use Sweetchuck\Robo\Composer\ComposerTaskLoader;
 use Sweetchuck\Robo\Composer\Utils;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ComposerRoboFile extends Tasks
@@ -38,10 +39,11 @@ class ComposerRoboFile extends Tasks
         $stdOutput = $this->output();
         if ($result->wasSuccessful() && isset($result['composer.packagePaths']['sweetchuck/robo-git'])) {
             $stdOutput->writeln('Success');
-        } else {
-            $stdError = ($stdOutput instanceof ConsoleOutputInterface) ? $stdOutput->getErrorOutput() : $stdOutput;
-            $stdError->writeln('Fail');
+
+            return $result->getExitCode();
         }
+
+        $this->getStdError()->writeln('Fail');
 
         return $result->getExitCode();
     }
@@ -99,5 +101,14 @@ class ComposerRoboFile extends Tasks
     protected function processFileName(string $fileName): string
     {
         return preg_replace('@^/proc/self/fd/(\d+)$@', 'php://fd/$1', $fileName);
+    }
+
+    protected function getStdError(): OutputInterface
+    {
+        $stdOutput = $this->output();
+
+        return $stdOutput instanceof ConsoleOutputInterface ?
+            $stdOutput->getErrorOutput()
+            : $stdOutput;
     }
 }

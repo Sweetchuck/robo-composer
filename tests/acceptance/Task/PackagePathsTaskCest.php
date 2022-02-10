@@ -20,15 +20,15 @@ class PackagePathsTaskCest
     {
         $id = $this->id('package-paths:basic:composer');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'composer');
-        $I->assertEquals(0, $I->getRoboTaskExitCode($id));
-        $I->assertStringEndsWith("\nSuccess\n", $I->getRoboTaskStdOutput($id));
+        $I->assertSame(0, $I->getRoboTaskExitCode($id));
+        $I->assertSame("Success\n", $I->getRoboTaskStdOutput($id));
     }
 
     public function runPackagePathsBasicFail(AcceptanceTester $I)
     {
         $id = $this->id('package-paths:basic:false');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'false');
-        $I->assertEquals(1, $I->getRoboTaskExitCode($id));
+        $I->assertSame(1, $I->getRoboTaskExitCode($id));
         $I->assertStringContainsString("\nFail\n", $I->getRoboTaskStdError($id));
     }
 }
