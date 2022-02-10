@@ -94,6 +94,25 @@ abstract class CliTaskBase extends TaskBase implements
     }
     //endregion
 
+    // region hideStdOutput
+    protected bool $hideStdOutput = true;
+
+    public function getHideStdOutput(): bool
+    {
+        return $this->hideStdOutput;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setHideStdOutput(bool $hideStdOutput)
+    {
+        $this->hideStdOutput = $hideStdOutput;
+
+        return $this;
+    }
+    // endregion
+
     //endregion
 
     /**
@@ -200,7 +219,9 @@ abstract class CliTaskBase extends TaskBase implements
     {
         switch ($type) {
             case Process::OUT:
-                $this->output()->write($data);
+                if (!$this->getHideStdOutput()) {
+                    $this->output()->write($data);
+                }
                 break;
 
             case Process::ERR:
