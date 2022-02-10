@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "43a0bd9d35f0f4f5fd2e98e3c811452b",
+    "content-hash": "d03117385672f5b89fec30880583b7ef",
     "packages": [
         {
             "name": "composer/semver",
@@ -2949,6 +2949,53 @@
             "time": "2021-11-30T19:35:32+00:00"
         },
         {
+            "name": "nuvoleweb/robo-config",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nuvoleweb/robo-config.git",
+                "reference": "ca3a724121c171c60d84ace8051d09e99abb9ed0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nuvoleweb/robo-config/zipball/ca3a724121c171c60d84ace8051d09e99abb9ed0",
+                "reference": "ca3a724121c171c60d84ace8051d09e99abb9ed0",
+                "shasum": ""
+            },
+            "require": {
+                "consolidation/robo": "^3.0"
+            },
+            "require-dev": {
+                "drupal/coder": "^8",
+                "phpro/grumphp": "^1.2",
+                "phpunit/phpunit": "^9.4"
+            },
+            "default-branch": true,
+            "type": "robo-tasks",
+            "autoload": {
+                "psr-4": {
+                    "NuvoleWeb\\Robo\\Task\\Config\\": "./src/",
+                    "NuvoleWeb\\Robo\\Tests\\": "./tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio De Marco",
+                    "email": "antonio@nuvole.org"
+                }
+            ],
+            "description": "CI/developer-friendly configuration processor for Robo.",
+            "support": {
+                "issues": "https://github.com/nuvoleweb/robo-config/issues",
+                "source": "https://github.com/nuvoleweb/robo-config/tree/2.0.0"
+            },
+            "time": "2022-01-12T09:43:01+00:00"
+        },
+        {
             "name": "phar-io/manifest",
             "version": "2.0.3",
             "source": {
@@ -5457,6 +5504,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "sweetchuck/utils": 20,
+        "nuvoleweb/robo-config": 20,
         "sweetchuck/codeception-module-robo-task-runner": 20,
         "sweetchuck/git-hooks": 20,
         "sweetchuck/robo-git": 20,

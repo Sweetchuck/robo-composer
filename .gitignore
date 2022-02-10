@@ -11,3 +11,5 @@
 
 /.git-hooks.local
 /RoboFileAcceptance.php
+
+/robo.yml
