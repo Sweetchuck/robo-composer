@@ -75,14 +75,18 @@ class RoboFile extends Tasks implements LoggerAwareInterface, ConfigAwareInterfa
     {
         $lintServices = BaseReporter::getServices();
         $container = $this->getContainer();
+        if (!($container instanceof LeagueContainer)) {
+            return;
+        }
+
         foreach ($lintServices as $name => $class) {
             if ($container->has($name)) {
                 continue;
             }
 
-            if ($container instanceof LeagueContainer) {
-                $container->share($name, $class);
-            }
+            $container
+                ->add($name, $class)
+                ->setShared(false);
         }
     }
 

@@ -8,7 +8,7 @@ use Robo\Result;
 use Robo\Task\BaseTask;
 use RuntimeException;
 use Sweetchuck\Robo\Composer\Utils;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 class RemoveIndirectDependenciesTask extends BaseTask
 {

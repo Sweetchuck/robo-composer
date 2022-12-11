@@ -41,7 +41,7 @@ class TaskTestBase extends Unit
         DummyProcess::reset();
 
         $this->container = new LeagueContainer();
-        $application = new SymfonyApplication('Sweetchuck - Robo Composer', '1.0.0');
+        $application = new SymfonyApplication('Sweetchuck - Robo Composer', '2.0.0');
         $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
         $this->config = (new RoboConfig());
         $input = null;
