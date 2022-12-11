@@ -8,7 +8,7 @@ use Codeception\Example;
 use org\bovigo\vfs\vfsStream;
 use Sweetchuck\Robo\composer\Test\AcceptanceTester;
 use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 class RemoveIndirectDependenciesCest
 {

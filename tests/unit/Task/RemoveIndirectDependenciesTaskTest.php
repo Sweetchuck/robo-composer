@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
 use org\bovigo\vfs\vfsStream;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * @covers \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask<extended>
