@@ -7,7 +7,8 @@ namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @covers \Sweetchuck\Robo\Composer\Task\LockDifferTask<extended>
+ * @covers \Sweetchuck\Robo\Composer\Task\LockDifferTask
+ * @covers \Sweetchuck\Robo\Composer\Task\TaskBase
  */
 class LockDifferTaskTest extends TaskTestBase
 {

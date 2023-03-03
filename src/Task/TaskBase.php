@@ -44,10 +44,7 @@ abstract class TaskBase extends BaseTask
         return $this->assetNamePrefix;
     }
 
-    /**
-     * @return $this
-     */
-    public function setAssetNamePrefix(string $value)
+    public function setAssetNamePrefix(string $value): static
     {
         $this->assetNamePrefix = $value;
 
@@ -55,10 +52,7 @@ abstract class TaskBase extends BaseTask
     }
     //endregion
 
-    /**
-     * @return $this
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): static
     {
         if (array_key_exists('assetNamePrefix', $options)) {
             $this->setAssetNamePrefix($options['assetNamePrefix']);
@@ -68,7 +62,7 @@ abstract class TaskBase extends BaseTask
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {
@@ -79,22 +73,16 @@ abstract class TaskBase extends BaseTask
             ->runReturn();
     }
 
-    /**
-     * @return $this
-     */
-    protected function runHeader()
+    protected function runHeader(): static
     {
         $this->printTaskInfo('');
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    abstract protected function runDoIt();
+    abstract protected function runDoIt(): static;
 
-    protected function runPrepareAssets()
+    protected function runPrepareAssets(): static
     {
         return $this;
     }

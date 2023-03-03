@@ -45,10 +45,7 @@ abstract class CliTaskBase extends TaskBase implements
         return $this->workingDirectory;
     }
 
-    /**
-     * @return $this
-     */
-    public function setWorkingDirectory(string $workingDirectory)
+    public function setWorkingDirectory(string $workingDirectory): static
     {
         $this->workingDirectory = $workingDirectory;
 
@@ -64,10 +61,7 @@ abstract class CliTaskBase extends TaskBase implements
         return $this->composerExecutable;
     }
 
-    /**
-     * @return $this
-     */
-    public function setComposerExecutable(string $composerExecutable)
+    public function setComposerExecutable(string $composerExecutable): static
     {
         $this->composerExecutable = $composerExecutable;
 
@@ -83,10 +77,7 @@ abstract class CliTaskBase extends TaskBase implements
         return $this->envVarComposer;
     }
 
-    /**
-     * @return $this
-     */
-    public function setEnvVarComposer(?string $value)
+    public function setEnvVarComposer(?string $value): static
     {
         $this->envVarComposer = $value;
 
@@ -102,10 +93,7 @@ abstract class CliTaskBase extends TaskBase implements
         return $this->hideStdOutput;
     }
 
-    /**
-     * @return $this
-     */
-    public function setHideStdOutput(bool $hideStdOutput)
+    public function setHideStdOutput(bool $hideStdOutput): static
     {
         $this->hideStdOutput = $hideStdOutput;
 
@@ -115,10 +103,7 @@ abstract class CliTaskBase extends TaskBase implements
 
     //endregion
 
-    /**
-     * @return $this
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): static
     {
         parent::setOptions($options);
 
@@ -152,20 +137,14 @@ abstract class CliTaskBase extends TaskBase implements
         return parent::run();
     }
 
-    /**
-     * @return $this
-     */
-    protected function runHeader()
+    protected function runHeader(): static
     {
         $this->printTaskInfo($this->command);
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function runDoIt()
+    public function runDoIt(): static
     {
         $process = $this
             ->getProcessHelper()
@@ -233,7 +212,7 @@ abstract class CliTaskBase extends TaskBase implements
     /**
      * {@inheritdoc}
      */
-    public function getCommand(): string
+    public function getCommand()
     {
         $envPattern = [];
         $envArgs = [];

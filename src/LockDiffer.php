@@ -39,7 +39,7 @@ class LockDiffer
         return $this->diff;
     }
 
-    protected function addNew(array $package)
+    protected function addNew(array $package): static
     {
         $this->diff[$package['name']] = [
             'name' => $package['name'],
@@ -51,7 +51,7 @@ class LockDiffer
         return $this;
     }
 
-    protected function addRemoved(array $package)
+    protected function addRemoved(array $package): static
     {
         $this->diff[$package['name']] = [
             'name' => $package['name'],
@@ -63,7 +63,7 @@ class LockDiffer
         return $this;
     }
 
-    protected function addChanged(array $a, array $b)
+    protected function addChanged(array $a, array $b): static
     {
         if (!$this->isChanged($a, $b)) {
             return $this;

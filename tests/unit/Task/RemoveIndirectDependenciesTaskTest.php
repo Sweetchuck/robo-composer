@@ -8,7 +8,8 @@ use org\bovigo\vfs\vfsStream;
 use Symfony\Component\Filesystem\Path;
 
 /**
- * @covers \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask<extended>
+ * @covers \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask
+ * @covers \Sweetchuck\Robo\Composer\Task\TaskBase
  */
 class RemoveIndirectDependenciesTaskTest extends TaskTestBase
 {
@@ -68,7 +69,7 @@ class RemoveIndirectDependenciesTaskTest extends TaskTestBase
     /**
      * @dataProvider casesRunSuccess
      */
-    public function testRunSuccess(array $expected, array $vfsStructure, array $options)
+    public function testRunSuccess(array $expected, array $vfsStructure, array $options): void
     {
         $expected += [
             'exitCode' => 0,

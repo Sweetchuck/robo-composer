@@ -36,7 +36,7 @@ class LockDifferTaskCest
     /**
      * @dataProvider casesLockDiffSuccess
      */
-    public function runLockDiffSuccess(AcceptanceTester $I, Example $example)
+    public function runLockDiffSuccess(AcceptanceTester $I, Example $example): void
     {
         $id = $this->id("composer:lock-diff:{$example['name']}");
         $I->runRoboTask(

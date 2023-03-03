@@ -9,9 +9,6 @@ use Sweetchuck\Robo\Composer\LockDiffer;
 class LockDifferTask extends TaskBase
 {
 
-    /**
-     * {@inheritdoc}
-     */
     protected string $taskName = 'Composer - lock differ';
 
     // region lockA
@@ -22,10 +19,7 @@ class LockDifferTask extends TaskBase
         return $this->lockA;
     }
 
-    /**
-     * @return $this
-     */
-    public function setLockA(array $lockA)
+    public function setLockA(array $lockA): static
     {
         $this->lockA = $lockA;
 
@@ -41,10 +35,7 @@ class LockDifferTask extends TaskBase
         return $this->lockB;
     }
 
-    /**
-     * @return $this
-     */
-    public function setLockB(array $lockB)
+    public function setLockB(array $lockB): static
     {
         $this->lockB = $lockB;
 
@@ -52,10 +43,7 @@ class LockDifferTask extends TaskBase
     }
     // endregion
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): static
     {
         parent::setOptions($options);
 
@@ -70,10 +58,7 @@ class LockDifferTask extends TaskBase
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function runDoIt()
+    protected function runDoIt(): static
     {
         $this->assets['composer.lockDiff'] = (new LockDiffer())->diff($this->getLockA(), $this->getLockB());
 

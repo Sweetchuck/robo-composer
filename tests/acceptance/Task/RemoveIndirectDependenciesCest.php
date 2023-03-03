@@ -72,7 +72,7 @@ class RemoveIndirectDependenciesCest
     /**
      * @dataProvider casesRemoveIndirectDependencies
      */
-    public function runRemoveIndirectDependencies(AcceptanceTester $I, Example $example)
+    public function runRemoveIndirectDependencies(AcceptanceTester $I, Example $example): void
     {
         $vfs = vfsStream::setup(
             __FUNCTION__,

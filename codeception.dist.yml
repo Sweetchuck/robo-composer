@@ -1,11 +1,12 @@
 
-namespace: Sweetchuck\Robo\Composer\Test
+namespace: 'Sweetchuck\Robo\Composer\Test'
 
 paths:
     tests: 'tests'
     data: 'tests/_data'
     envs: 'tests/_envs'
     log: 'tests/_log'
+    output: 'tests/_log'
     support: 'tests/_support'
 
 settings:

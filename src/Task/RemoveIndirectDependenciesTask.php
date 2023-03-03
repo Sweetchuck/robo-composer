@@ -13,7 +13,7 @@ use Symfony\Component\Filesystem\Path;
 class RemoveIndirectDependenciesTask extends BaseTask
 {
 
-    protected int $jsonEncodeOptions = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+    protected int $jsonEncodeOptions = \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
 
     // region workingDirectory
     protected string $workingDirectory = '.';
@@ -23,10 +23,7 @@ class RemoveIndirectDependenciesTask extends BaseTask
         return $this->workingDirectory;
     }
 
-    /**
-     * @return $this
-     */
-    public function setWorkingDirectory(string $workingDirectory)
+    public function setWorkingDirectory(string $workingDirectory): static
     {
         $this->workingDirectory = $workingDirectory;
 
@@ -46,10 +43,7 @@ class RemoveIndirectDependenciesTask extends BaseTask
         return getenv('COMPOSER') ?: 'composer.json';
     }
 
-    /**
-     * @return $this
-     */
-    public function setComposerJsonFileName(string $composerJsonFileName)
+    public function setComposerJsonFileName(string $composerJsonFileName): static
     {
         $this->composerJsonFileName = $composerJsonFileName;
 
@@ -57,7 +51,7 @@ class RemoveIndirectDependenciesTask extends BaseTask
     }
     // endregion
 
-    public function setOptions(array $options)
+    public function setOptions(array $options): static
     {
         if (array_key_exists('workingDirectory', $options)) {
             $this->setWorkingDirectory($options['workingDirectory']);
@@ -108,11 +102,11 @@ class RemoveIndirectDependenciesTask extends BaseTask
         return $content === false ? null : json_decode($content, true);
     }
 
-    protected function writeJsonFile(string $fileName, array $data)
+    protected function writeJsonFile(string $fileName, array $data): static
     {
         $result = file_put_contents(
             $fileName,
-            json_encode($data, $this->jsonEncodeOptions) . "\n"
+            json_encode($data, $this->jsonEncodeOptions) . "\n",
         );
 
         if ($result === false) {

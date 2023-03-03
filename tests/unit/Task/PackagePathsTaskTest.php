@@ -7,7 +7,9 @@ namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 
 /**
- * @covers \Sweetchuck\Robo\Composer\Task\PackagePathsTask<extended>
+ * @covers \Sweetchuck\Robo\Composer\Task\PackagePathsTask
+ * @covers \Sweetchuck\Robo\Composer\Task\CliTaskBase
+ * @covers \Sweetchuck\Robo\Composer\Task\TaskBase
  */
 class PackagePathsTaskTest extends TaskTestBase
 {

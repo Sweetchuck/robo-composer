@@ -8,9 +8,6 @@ use Robo\Contract\CommandInterface;
 
 class PackagePathsTask extends CliTaskBase implements CommandInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected string $taskName = 'Composer - Package paths';
 
     protected function getAction(): string
@@ -18,10 +15,7 @@ class PackagePathsTask extends CliTaskBase implements CommandInterface
         return 'show -P';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function runPrepareAssets()
+    protected function runPrepareAssets(): static
     {
         $this->assets['composer.packagePaths'] = [];
 

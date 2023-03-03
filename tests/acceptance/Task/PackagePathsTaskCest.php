@@ -16,7 +16,7 @@ class PackagePathsTaskCest
         return static::class . ":$suffix";
     }
 
-    public function runPackagePathsBasicSuccess(AcceptanceTester $I)
+    public function runPackagePathsBasicSuccess(AcceptanceTester $I): void
     {
         $id = $this->id('package-paths:basic:composer');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'composer');
@@ -24,7 +24,7 @@ class PackagePathsTaskCest
         $I->assertSame("Success\n", $I->getRoboTaskStdOutput($id));
     }
 
-    public function runPackagePathsBasicFail(AcceptanceTester $I)
+    public function runPackagePathsBasicFail(AcceptanceTester $I): void
     {
         $id = $this->id('package-paths:basic:false');
         $I->runRoboTask($id, $this->class, 'package-paths:basic', 'false');

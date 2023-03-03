@@ -1,6 +1,5 @@
 
 actor: 'AcceptanceTester'
-
 modules:
     enabled:
         - 'Asserts'

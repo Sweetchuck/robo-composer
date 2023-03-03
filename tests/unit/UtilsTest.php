@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Unit;
 
+use Sweetchuck\Robo\Composer\Test\UnitTester;
 use Sweetchuck\Robo\Composer\Utils;
 use Codeception\Test\Unit;
 
@@ -12,10 +13,7 @@ use Codeception\Test\Unit;
  */
 class UtilsTest extends Unit
 {
-    /**
-     * @var \Sweetchuck\Robo\Composer\Test\UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
     /**
      * @return array
