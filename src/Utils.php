@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer;
 
-use Sweetchuck\Utils\Filter\ArrayFilterByPropertyValue;
+use Sweetchuck\Utils\Filter\ArrayAllowedValueFilter;
 
 class Utils
 {
@@ -49,9 +49,9 @@ class Utils
         ];
 
         $directDependencies = ($json['require'] ?? []) + ($json['require-dev'] ?: []);
-        $filter = new ArrayFilterByPropertyValue();
-        $filter->setProperty('name');
-        $filter->setAllowedValues($directDependencies);
+        $filter = new ArrayAllowedValueFilter();
+        $filter->setKey('name');
+        $filter->setAllowedValues(array_keys($directDependencies));
         foreach ($keys as $key) {
             if (!array_key_exists($key, $lock)) {
                 continue;
