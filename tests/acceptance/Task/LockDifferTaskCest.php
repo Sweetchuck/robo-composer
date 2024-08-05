@@ -4,9 +4,10 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Acceptance\Task;
 
+use Codeception\Attribute\DataProvider;
 use Codeception\Example;
-use Sweetchuck\Robo\composer\Test\AcceptanceTester;
-use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
+use Sweetchuck\Robo\Composer\Tests\AcceptanceTester;
+use Sweetchuck\Robo\Composer\Tests\Helper\RoboFiles\ComposerRoboFile;
 use Symfony\Component\Yaml\Yaml;
 
 class LockDifferTaskCest
@@ -18,15 +19,18 @@ class LockDifferTaskCest
         return static::class . ":$suffix";
     }
 
-    protected function casesLockDiffSuccess(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesLockDiffSuccess(): array
     {
         $cases = [];
         foreach (Yaml::parseFile(codecept_data_dir('lockDiffer/cases.yml')) as $name => $case) {
-            $cases[$name] = [
+            $cases[(string) $name] = [
                 'name' => $name,
-                'expected' => Yaml::dump($case['expected'], 99, 4),
-                'lockA' => $this->textToFileName(json_encode($case['lockA'])),
-                'lockB' => $this->textToFileName(json_encode($case['lockB'])),
+                'expected' => Yaml::dump($case['expected'], 99),
+                'lockA' => static::textToFileName(json_encode($case['lockA']) ?: '{}'),
+                'lockB' => static::textToFileName(json_encode($case['lockB']) ?: '{}'),
             ];
         }
 
@@ -34,8 +38,9 @@ class LockDifferTaskCest
     }
 
     /**
-     * @dataProvider casesLockDiffSuccess
+     * @phpstan-param \Codeception\Example<string, mixed> $example
      */
+    #[DataProvider('casesLockDiffSuccess')]
     public function runLockDiffSuccess(AcceptanceTester $I, Example $example): void
     {
         $id = $this->id("composer:lock-diff:{$example['name']}");
@@ -66,7 +71,7 @@ class LockDifferTaskCest
         );
     }
 
-    protected function textToFileName(string $text): string
+    protected static function textToFileName(string $text): string
     {
         return 'data://text/plain;base64,' . base64_encode($text);
     }

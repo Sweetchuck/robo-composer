@@ -51,6 +51,9 @@ class RemoveIndirectDependenciesTask extends BaseTask
     }
     // endregion
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setOptions(array $options): static
     {
         if (array_key_exists('workingDirectory', $options)) {
@@ -95,6 +98,9 @@ class RemoveIndirectDependenciesTask extends BaseTask
         return Result::success($this);
     }
 
+    /**
+     * @return null|array<string, mixed>
+     */
     protected function readJsonFile(string $fileName): ?array
     {
         $content = @file_get_contents($fileName);
@@ -102,6 +108,9 @@ class RemoveIndirectDependenciesTask extends BaseTask
         return $content === false ? null : json_decode($content, true);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     protected function writeJsonFile(string $fileName, array $data): static
     {
         $result = file_put_contents(

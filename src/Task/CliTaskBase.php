@@ -10,7 +10,7 @@ use League\Container\ContainerAwareTrait;
 use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
 use Robo\Result;
-use Sweetchuck\Robo\Composer\Utils;
+use Sweetchuck\Utils\Filter\EnabledFilter;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
@@ -230,6 +230,7 @@ abstract class CliTaskBase extends TaskBase implements
             $cmdPattern[] = $action;
         }
 
+        $enabledFilter = new EnabledFilter();
         foreach ($this->getCommandOptions() as $optionName => $option) {
             switch ($option['type']) {
                 case 'environment':
@@ -287,7 +288,7 @@ abstract class CliTaskBase extends TaskBase implements
                     break;
 
                 case 'space-separated':
-                    $items = Utils::filterEnabled($option['value']);
+                    $items = array_filter($option['value'], $enabledFilter);
                     if ($items) {
                         $cmdPattern[] = "--$optionName=%s";
                         $cmdArgs[] = escapeshellarg(implode(' ', $items));
@@ -318,6 +319,9 @@ abstract class CliTaskBase extends TaskBase implements
         return implode(' ', array_filter([$chDir, $env, $cmd, $asIs]));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getCommandOptions(): array
     {
         return [

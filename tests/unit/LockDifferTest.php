@@ -4,30 +4,36 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Unit;
 
+use Codeception\Attribute\DataProvider;
 use Codeception\Test\Unit;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Sweetchuck\Robo\Composer\LockDiffer;
-use Sweetchuck\Robo\Composer\Test\UnitTester;
+use Sweetchuck\Robo\Composer\Tests\UnitTester;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * @covers \Sweetchuck\Robo\Composer\LockDiffer
- */
+#[CoversClass(LockDiffer::class)]
 class LockDifferTest extends Unit
 {
 
     protected UnitTester $tester;
 
-    public function casesDiff(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesDiff(): array
     {
         return Yaml::parseFile(codecept_data_dir('lockDiffer/cases.yml'));
     }
 
     /**
-     * @dataProvider casesDiff
+     * @phpstan-param array<string, mixed> $expected
+     * @phpstan-param array<string, mixed> $lockA
+     * @phpstan-param array<string, mixed> $lockB
      */
-    public function testDiff(array $expected, array $a, array $b)
+    #[DataProvider('casesDiff')]
+    public function testDiff(array $expected, array $lockA, array $lockB): void
     {
         $lockDiffer = new LockDiffer();
-        $this->tester->assertSame($expected, $lockDiffer->diff($a, $b));
+        $this->tester->assertSame($expected, $lockDiffer->diff($lockA, $lockB));
     }
 }

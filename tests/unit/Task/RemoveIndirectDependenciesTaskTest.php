@@ -4,17 +4,22 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
+use Codeception\Attribute\DataProvider;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask;
+use Sweetchuck\Robo\Composer\Task\TaskBase;
 use Symfony\Component\Filesystem\Path;
 
-/**
- * @covers \Sweetchuck\Robo\Composer\Task\RemoveIndirectDependenciesTask
- * @covers \Sweetchuck\Robo\Composer\Task\TaskBase
- */
+#[CoversClass(RemoveIndirectDependenciesTask::class)]
+#[CoversClass(TaskBase::class)]
 class RemoveIndirectDependenciesTaskTest extends TaskTestBase
 {
 
-    public function casesRunSuccess(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesRunSuccess(): array
     {
         return [
             'basic' => [
@@ -67,8 +72,11 @@ class RemoveIndirectDependenciesTaskTest extends TaskTestBase
     }
 
     /**
-     * @dataProvider casesRunSuccess
+     * @phpstan-param array<string, mixed> $expected
+     * @phpstan-param array<string, mixed> $vfsStructure
+     * @phpstan-param array<string, mixed> $options
      */
+    #[DataProvider('casesRunSuccess')]
     public function testRunSuccess(array $expected, array $vfsStructure, array $options): void
     {
         $expected += [
@@ -97,7 +105,7 @@ class RemoveIndirectDependenciesTaskTest extends TaskTestBase
         if ($expected['lockFileExists']) {
             $this->tester->assertSame(
                 $expected['lock'],
-                json_decode(file_get_contents($lockFileName), true)
+                json_decode(file_get_contents($lockFileName) ?: '{}', true)
             );
         }
     }

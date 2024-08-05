@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\Robo\Composer\Test\Helper\RoboFiles;
+namespace Sweetchuck\Robo\Composer\Tests\Helper\RoboFiles;
 
 use Consolidation\AnnotatedCommand\CommandResult;
 use Robo\Tasks;
@@ -50,12 +50,14 @@ class ComposerRoboFile extends Tasks
 
     /**
      * @command composer:remove-indirect-dependencies
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public function removeIndirectDependencies(
         array $options = [
             'workingDirectory' => '',
             'composerJsonFileName' => '',
-        ]
+        ],
     ): CommandResult {
         $result = $this
             ->taskComposerRemoveIndirectDependencies($options)
@@ -68,6 +70,8 @@ class ComposerRoboFile extends Tasks
 
     /**
      * @command composer:lock-diff
+     *
+     * @phpstan-param array<string, mixed> $options
      *
      * @field-labels
      *   name: Name
@@ -82,15 +86,15 @@ class ComposerRoboFile extends Tasks
         $options = [
             'format' => 'table',
             'fields' => '',
-        ]
-    ) {
+        ],
+    ): void {
         $a = $this->processFileName($a);
         $b = $this->processFileName($b);
 
         $result = $this
             ->taskComposerLockDiffer()
-            ->setLockA(json_decode(file_get_contents($a), true))
-            ->setLockB(json_decode(file_get_contents($b), true))
+            ->setLockA(json_decode(file_get_contents($a) ?: '{}', true))
+            ->setLockB(json_decode(file_get_contents($b) ?: '{}', true))
             ->run();
 
         $this
@@ -107,8 +111,8 @@ class ComposerRoboFile extends Tasks
     {
         $stdOutput = $this->output();
 
-        return $stdOutput instanceof ConsoleOutputInterface ?
-            $stdOutput->getErrorOutput()
+        return $stdOutput instanceof ConsoleOutputInterface
+            ? $stdOutput->getErrorOutput()
             : $stdOutput;
     }
 }

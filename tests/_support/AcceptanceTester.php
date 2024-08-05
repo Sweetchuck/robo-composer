@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\Robo\Composer\Test;
+namespace Sweetchuck\Robo\Composer\Tests;
 
 /**
  * Inherited Methods

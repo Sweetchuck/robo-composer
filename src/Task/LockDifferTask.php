@@ -12,13 +12,22 @@ class LockDifferTask extends TaskBase
     protected string $taskName = 'Composer - lock differ';
 
     // region lockA
+    /**
+     * @var array<string, mixed>
+     */
     protected array $lockA = [];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getLockA(): array
     {
         return $this->lockA;
     }
 
+    /**
+     * @param array<string, mixed> $lockA
+     */
     public function setLockA(array $lockA): static
     {
         $this->lockA = $lockA;
@@ -28,13 +37,22 @@ class LockDifferTask extends TaskBase
     // endregion
 
     // region lockB
+    /**
+     * @var array<string, mixed>
+     */
     protected array $lockB = [];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getLockB(): array
     {
         return $this->lockB;
     }
 
+    /**
+     * @param array<string, mixed> $lockB
+     */
     public function setLockB(array $lockB): static
     {
         $this->lockB = $lockB;

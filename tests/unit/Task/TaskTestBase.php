@@ -13,8 +13,8 @@ use Robo\Robo;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcessHelper;
-use Sweetchuck\Robo\Composer\Test\Helper\Dummy\DummyTaskBuilder;
-use Sweetchuck\Robo\Composer\Test\UnitTester;
+use Sweetchuck\Robo\Composer\Tests\Helper\Dummy\DummyTaskBuilder;
+use Sweetchuck\Robo\Composer\Tests\UnitTester;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\ErrorHandler\BufferingLogger;
 
@@ -32,6 +32,8 @@ class TaskTestBase extends Unit
 
     /**
      * @SuppressWarnings("CamelCaseMethodName")
+     *
+     * @return void
      */
     public function _before()
     {

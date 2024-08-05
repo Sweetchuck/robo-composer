@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Acceptance\Task;
 
+use Codeception\Attribute\DataProvider;
 use Codeception\Example;
 use org\bovigo\vfs\vfsStream;
-use Sweetchuck\Robo\composer\Test\AcceptanceTester;
-use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
+use Sweetchuck\Robo\Composer\Tests\AcceptanceTester;
+use Sweetchuck\Robo\Composer\Tests\Helper\RoboFiles\ComposerRoboFile;
 use Symfony\Component\Filesystem\Path;
 
 class RemoveIndirectDependenciesCest
@@ -19,7 +20,10 @@ class RemoveIndirectDependenciesCest
         return static::class . ":$suffix";
     }
 
-    public function casesRemoveIndirectDependencies(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesRemoveIndirectDependencies(): array
     {
         return [
             'basic' => [
@@ -70,8 +74,9 @@ class RemoveIndirectDependenciesCest
     }
 
     /**
-     * @dataProvider casesRemoveIndirectDependencies
+     * @param Example<string, mixed> $example
      */
+    #[DataProvider('casesRemoveIndirectDependencies')]
     public function runRemoveIndirectDependencies(AcceptanceTester $I, Example $example): void
     {
         $vfs = vfsStream::setup(
@@ -91,20 +96,20 @@ class RemoveIndirectDependenciesCest
             $id,
             $this->class,
             'composer:remove-indirect-dependencies',
-            ...$options
+            ...$options,
         );
 
         $I->assertSame(0, $I->getRoboTaskExitCode($id));
 
-        $example['lockFileExists'] ?
-            $I->assertFileExists($lockFileName)
+        $example['lockFileExists']
+            ? $I->assertFileExists($lockFileName)
             : $I->assertFileNotExists($lockFileName);
 
         if ($example['lockFileExists']) {
             $I->assertSame(
                 $example['lock'],
-                json_decode(file_get_contents($lockFileName), true),
-                "content of the $lockFileName file"
+                json_decode(file_get_contents($lockFileName) ?: '{}', true),
+                "content of the $lockFileName file",
             );
         }
     }

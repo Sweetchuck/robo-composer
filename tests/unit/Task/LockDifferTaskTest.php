@@ -4,20 +4,25 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
+use Codeception\Attribute\DataProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Sweetchuck\Robo\Composer\Task\LockDifferTask;
+use Sweetchuck\Robo\Composer\Task\TaskBase;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * @covers \Sweetchuck\Robo\Composer\Task\LockDifferTask
- * @covers \Sweetchuck\Robo\Composer\Task\TaskBase
- */
+#[CoversClass(LockDifferTask::class)]
+#[CoversClass(TaskBase::class)]
 class LockDifferTaskTest extends TaskTestBase
 {
 
-    public function casesRunSuccess(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesRunSuccess(): array
     {
         $cases = [];
         foreach (Yaml::parseFile(codecept_data_dir('lockDiffer/cases.yml')) as $name => $case) {
-            $cases[$name] = [
+            $cases[(string) $name] = [
                 [
                     'assets' => [
                         'composer.lockDiff' => $case['expected'],
@@ -34,8 +39,10 @@ class LockDifferTaskTest extends TaskTestBase
     }
 
     /**
-     * @dataProvider casesRunSuccess
+     * @phpstan-param array<string, mixed> $expected
+     * @phpstan-param array<string, mixed> $options
      */
+    #[DataProvider('casesRunSuccess')]
     public function testRunSuccess(array $expected, array $options): void
     {
         $expected += [

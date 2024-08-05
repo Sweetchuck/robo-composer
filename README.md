@@ -1,8 +1,8 @@
 
 # Robo task wrapper for Composer
 
-[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-composer/tree/3.x.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-composer/?branch=3.x)
-[![codecov](https://codecov.io/gh/Sweetchuck/robo-composer/branch/3.x/graph/badge.svg?token=859DBVngn4)](https://codecov.io/gh/Sweetchuck/robo-composer/tree/3.x)
+[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-composer/tree/4.x.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-composer/?branch=4.x)
+[![codecov](https://codecov.io/gh/Sweetchuck/robo-composer/branch/4.x/graph/badge.svg?token=859DBVngn4)](https://codecov.io/gh/Sweetchuck/robo-composer/tree/4.x)
 
 @todo
 

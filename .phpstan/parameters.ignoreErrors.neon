@@ -1,0 +1,117 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\:\\:setAssetNamePrefix\\(\\)\\.$#"
+			count: 1
+			path: ../RoboFile.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Robo\\\\Task\\\\Filesystem\\\\FilesystemStack\\:\\:mkdir\\(\\)\\.$#"
+			count: 4
+			path: ../RoboFile.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Git\\\\Task\\\\GitListStagedFilesTask\\:\\:setPaths\\(\\)\\.$#"
+			count: 1
+			path: ../RoboFile.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Git\\\\Task\\\\GitReadStagedFilesTask\\:\\:setCommandOnly\\(\\)\\.$#"
+			count: 1
+			path: ../RoboFile.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Phpstan\\\\Task\\\\AnalyzeTask\\:\\:setNoProgress\\(\\)\\.$#"
+			count: 1
+			path: ../RoboFile.php
+
+		-
+			message: "#^Call to an undefined method Sweetchuck\\\\Robo\\\\Git\\\\Task\\\\GitReadStagedFilesTask\\:\\:deferTaskConfiguration\\(\\)\\.$#"
+			count: 1
+			path: ../RoboFile.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^Method Sweetchuck\\\\Robo\\\\Composer\\\\Tests\\\\Helper\\\\Dummy\\\\DummyTaskBuilder\\:\\:taskComposerLockDiffer\\(\\) should return Robo\\\\Collection\\\\CollectionBuilder but returns Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\LockDifferTask\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^Method Sweetchuck\\\\Robo\\\\Composer\\\\Tests\\\\Helper\\\\Dummy\\\\DummyTaskBuilder\\:\\:taskComposerPackagePaths\\(\\) should return Robo\\\\Collection\\\\CollectionBuilder but returns Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\PackagePathsTask\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^Method Sweetchuck\\\\Robo\\\\Composer\\\\Tests\\\\Helper\\\\Dummy\\\\DummyTaskBuilder\\:\\:taskComposerRemoveIndirectDependencies\\(\\) should return Robo\\\\Collection\\\\CollectionBuilder but returns Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\RemoveIndirectDependenciesTask\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\LockDifferTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\PackagePathsTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\RemoveIndirectDependenciesTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^Parameter \\#2 \\$commandFile of static method Robo\\\\Collection\\\\CollectionBuilder\\:\\:create\\(\\) expects Robo\\\\Tasks, null given\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\:\\:setLockA\\(\\)\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^Method Sweetchuck\\\\Robo\\\\Composer\\\\Tests\\\\Helper\\\\RoboFiles\\\\ComposerRoboFile\\:\\:taskComposerLockDiffer\\(\\) should return Robo\\\\Collection\\\\CollectionBuilder but returns Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\LockDifferTask\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^Method Sweetchuck\\\\Robo\\\\Composer\\\\Tests\\\\Helper\\\\RoboFiles\\\\ComposerRoboFile\\:\\:taskComposerPackagePaths\\(\\) should return Robo\\\\Collection\\\\CollectionBuilder but returns Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\PackagePathsTask\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^Method Sweetchuck\\\\Robo\\\\Composer\\\\Tests\\\\Helper\\\\RoboFiles\\\\ComposerRoboFile\\:\\:taskComposerRemoveIndirectDependencies\\(\\) should return Robo\\\\Collection\\\\CollectionBuilder but returns Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\RemoveIndirectDependenciesTask\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\LockDifferTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\PackagePathsTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Composer\\\\Task\\\\RemoveIndirectDependenciesTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
+			count: 1
+			path: ../tests/_support/Helper/RoboFiles/ComposerRoboFile.php
+
+		-
+			message: "#^Parameter \\#2 \\$commandFile of static method Robo\\\\Collection\\\\CollectionBuilder\\:\\:create\\(\\) expects Robo\\\\Tasks, null given\\.$#"
+			count: 1
+			path: ../tests/unit/Task/TaskTestBase.php
+

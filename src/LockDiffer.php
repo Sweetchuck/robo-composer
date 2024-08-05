@@ -7,8 +7,17 @@ namespace Sweetchuck\Robo\Composer;
 class LockDiffer
 {
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $diff = [];
 
+    /**
+     * @param array<string, mixed> $a
+     * @param array<string, mixed> $b
+     *
+     * @return array<string, mixed>
+     */
     public function diff(array $a, array $b): array
     {
         $this->diff = [];
@@ -39,9 +48,12 @@ class LockDiffer
         return $this->diff;
     }
 
+    /**
+     * @param array<string, mixed> $package
+     */
     protected function addNew(array $package): static
     {
-        $this->diff[$package['name']] = [
+        $this->diff[(string) $package['name']] = [
             'name' => $package['name'],
             'version_old' => null,
             'version_new' => $package['version'],
@@ -51,9 +63,12 @@ class LockDiffer
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $package
+     */
     protected function addRemoved(array $package): static
     {
-        $this->diff[$package['name']] = [
+        $this->diff[(string) $package['name']] = [
             'name' => $package['name'],
             'version_old' => $package['version'],
             'version_new' => null,
@@ -63,13 +78,17 @@ class LockDiffer
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $a
+     * @param array<string, mixed> $b
+     */
     protected function addChanged(array $a, array $b): static
     {
         if (!$this->isChanged($a, $b)) {
             return $this;
         }
 
-        $this->diff[$a['name']] = [
+        $this->diff[(string) $a['name']] = [
             'name' => $a['name'],
             'version_old' => $a['version'] === $b['version'] ? null : $a['version'],
             'version_new' => $a['version'] === $b['version'] ? null : $b['version'],
@@ -83,11 +102,20 @@ class LockDiffer
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $a
+     * @param array<string, mixed> $b
+     */
     protected function isChanged(array $a, array $b): bool
     {
         return $a['version'] !== $b['version'] || $a['_required-as'] !== $b['_required-as'];
     }
 
+    /**
+     * @param array<string, mixed> $lock
+     *
+     * @return array<string, mixed>
+     */
     protected function normalizePackages(array $lock): array
     {
         $packages = [];

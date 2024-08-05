@@ -11,6 +11,9 @@ use Robo\TaskInfo;
 abstract class TaskBase extends BaseTask
 {
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $assets = [];
 
     protected string $taskName = '';
@@ -22,6 +25,10 @@ abstract class TaskBase extends BaseTask
 
     /**
      * {@inheritdoc}
+     *
+     * @phpstan-param null|array<string, mixed> $context
+     *
+     * @phpstan-return array<string, mixed>
      */
     protected function getTaskContext($context = null)
     {
@@ -52,6 +59,9 @@ abstract class TaskBase extends BaseTask
     }
     //endregion
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setOptions(array $options): static
     {
         if (array_key_exists('assetNamePrefix', $options)) {
@@ -107,6 +117,9 @@ abstract class TaskBase extends BaseTask
         return '';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getAssetsWithPrefixedNames(): array
     {
         $prefix = $this->getAssetNamePrefix();

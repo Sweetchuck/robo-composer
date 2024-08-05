@@ -4,105 +4,21 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Unit;
 
-use Sweetchuck\Robo\Composer\Test\UnitTester;
+use Codeception\Attribute\DataProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Sweetchuck\Robo\Composer\Tests\UnitTester;
 use Sweetchuck\Robo\Composer\Utils;
 use Codeception\Test\Unit;
 
-/**
- * @covers \Sweetchuck\Robo\Composer\Utils
- */
+#[CoversClass(Utils::class)]
 class UtilsTest extends Unit
 {
     protected UnitTester $tester;
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    public function casesFilterEnabled(): array
-    {
-        return [
-            'empty' => [
-                [],
-                [],
-            ],
-            'all in' => [
-                [
-                    'a' => true,
-                    'c' => 'foo',
-                    'e' => 1,
-                    'f' => -1,
-                    'h' => [
-                        'enabled' => true,
-                    ],
-                    'j' => (object) [
-                        'enabled' => true,
-                    ],
-                ],
-                [
-                    'a' => true,
-                    'b' => false,
-                    'c' => 'foo',
-                    'd' => '',
-                    'e' => 1,
-                    'f' => -1,
-                    'g' => 0,
-                    'h' => [
-                        'enabled' => true,
-                    ],
-                    'i' => [
-                        'enabled' => false,
-                    ],
-                    'j' => (object) [
-                        'enabled' => true,
-                    ],
-                    'k' => (object) [
-                        'enabled' => false,
-                    ],
-                ],
-            ],
-            'non-default property' => [
-                [
-                    'b' => [
-                        'available' => true,
-                    ],
-                    'e' => (object) [
-                        'available' => true,
-                    ],
-                ],
-                [
-                    'a' => [
-                        'enabled' => true,
-                    ],
-                    'b' => [
-                        'available' => true,
-                    ],
-                    'c' => [
-                        'available' => false,
-                    ],
-                    'd' => (object) [
-                        'enabled' => true,
-                    ],
-                    'e' => (object) [
-                        'available' => true,
-                    ],
-                    'f' => (object) [
-                        'available' => false,
-                    ],
-                ],
-                'available',
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider casesFilterEnabled
-     */
-    public function testFilterEnabled(array $expected, array $items, string $property = 'enabled'): void
-    {
-        $this->tester->assertEquals($expected, Utils::filterEnabled($items, $property));
-    }
-
-    public function casesReplaceFileExtension(): array
+    public static function casesReplaceFileExtension(): array
     {
         return [
             'basic' => ['a.c', 'a.b', 'c'],
@@ -110,9 +26,7 @@ class UtilsTest extends Unit
         ];
     }
 
-    /**
-     * @dataProvider casesReplaceFileExtension
-     */
+    #[DataProvider('casesReplaceFileExtension')]
     public function testReplaceFileExtension(string $expected, string $fileName, string $newExtension): void
     {
         $this->tester->assertSame(
@@ -121,7 +35,10 @@ class UtilsTest extends Unit
         );
     }
 
-    public function casesRemoveIndirectDependencies(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesRemoveIndirectDependencies(): array
     {
         return [
             'basic' => [
@@ -166,8 +83,11 @@ class UtilsTest extends Unit
     }
 
     /**
-     * @dataProvider casesRemoveIndirectDependencies
+     * @phpstan-param array<string, mixed> $expected
+     * @phpstan-param array<string, mixed> $json
+     * @phpstan-param array<string, mixed> $lock
      */
+    #[DataProvider('casesRemoveIndirectDependencies')]
     public function testRemoveIndirectDependencies(array $expected, array $json, array $lock): void
     {
         $this->tester->assertSame($expected, Utils::removeIndirectDependencies($json, $lock));

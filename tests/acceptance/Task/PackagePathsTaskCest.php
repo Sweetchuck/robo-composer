@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Acceptance\Task;
 
-use Sweetchuck\Robo\composer\Test\AcceptanceTester;
-use Sweetchuck\Robo\Composer\Test\Helper\RoboFiles\ComposerRoboFile;
+use Sweetchuck\Robo\Composer\Tests\AcceptanceTester;
+use Sweetchuck\Robo\Composer\Tests\Helper\RoboFiles\ComposerRoboFile;
 
 class PackagePathsTaskCest
 {

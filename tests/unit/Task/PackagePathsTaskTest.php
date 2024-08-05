@@ -4,17 +4,23 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Composer\Tests\Unit\Task;
 
+use Codeception\Attribute\DataProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
+use Sweetchuck\Robo\Composer\Task\CliTaskBase;
+use Sweetchuck\Robo\Composer\Task\PackagePathsTask;
+use Sweetchuck\Robo\Composer\Task\TaskBase;
 
-/**
- * @covers \Sweetchuck\Robo\Composer\Task\PackagePathsTask
- * @covers \Sweetchuck\Robo\Composer\Task\CliTaskBase
- * @covers \Sweetchuck\Robo\Composer\Task\TaskBase
- */
+#[CoversClass(PackagePathsTask::class)]
+#[CoversClass(CliTaskBase::class)]
+#[CoversClass(TaskBase::class)]
 class PackagePathsTaskTest extends TaskTestBase
 {
 
-    public function casesGetCommand(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesGetCommand(): array
     {
         return [
             'defaults' => [
@@ -51,15 +57,19 @@ class PackagePathsTaskTest extends TaskTestBase
     }
 
     /**
-     * @dataProvider casesGetCommand
+     * @phpstan-param array<string, mixed> $options
      */
+    #[DataProvider('casesGetCommand')]
     public function testGetCommand(string $expected, array $options): void
     {
         $task = $this->taskBuilder->taskComposerPackagePaths($options);
         $this->tester->assertEquals($expected, $task->getCommand());
     }
 
-    public function casesRunSuccess(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public static function casesRunSuccess(): array
     {
         return [
             'empty' => [
@@ -125,8 +135,11 @@ class PackagePathsTaskTest extends TaskTestBase
     }
 
     /**
-     * @dataProvider casesRunSuccess
+     * @phpstan-param array<string, mixed> $expected
+     * @phpstan-param array<string, mixed> $options
+     * @phpstan-param array<string, mixed> $processProphecy
      */
+    #[DataProvider('casesRunSuccess')]
     public function testRunSuccess(array $expected, array $options, array $processProphecy): void
     {
         $expected += [

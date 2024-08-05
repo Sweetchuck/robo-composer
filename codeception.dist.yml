@@ -1,17 +1,18 @@
 
-namespace: 'Sweetchuck\Robo\Composer\Test'
+namespace: 'Sweetchuck\Robo\Composer\Tests'
 
 paths:
     tests: 'tests'
     data: 'tests/_data'
     envs: 'tests/_envs'
-    log: 'tests/_log'
-    output: 'tests/_log'
+    output: 'tests/_output'
     support: 'tests/_support'
 
 settings:
     colors: true
     memory_limit: '1024M'
+    shuffle: false
+    lint: false
 
 extensions:
     enabled:
@@ -19,6 +20,8 @@ extensions:
 
 coverage:
     enabled: true
-    whitelist:
-        include:
-            - 'src/*'
+    show_uncovered: true
+    low_limit: 60
+    high_limit: 90
+    include:
+        - 'src/*'

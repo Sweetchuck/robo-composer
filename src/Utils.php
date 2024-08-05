@@ -14,33 +14,17 @@ class Utils
         return dirname(__DIR__);
     }
 
-    /**
-     * @deprecated
-     */
-    public static function filterEnabled(array $items, string $property = 'enabled'): array
-    {
-        $filtered = [];
-
-        foreach ($items as $key => $value) {
-            if ((is_scalar($value) || is_bool($value)) && $value) {
-                $filtered[$key] = $value;
-            } elseif (is_object($value) && property_exists($value, $property) && $value->$property) {
-                // @todo Handle if the $property not exists.
-                $filtered[$key] = $value;
-            } elseif (is_array($value) && !empty($value[$property])) {
-                // @todo Handle if the $property not exists.
-                $filtered[$key] = $value;
-            }
-        }
-
-        return $filtered;
-    }
-
     public static function replaceFileExtension(string $fileName, string $newExtension): string
     {
         return preg_replace('/\.[^\.]+$/', ".$newExtension", $fileName);
     }
 
+    /**
+     * @param array<string, mixed> $json
+     * @param array<string, mixed> $lock
+     *
+     * @return array<string, mixed>
+     */
     public static function removeIndirectDependencies(array $json, array $lock): array
     {
         $keys = [
