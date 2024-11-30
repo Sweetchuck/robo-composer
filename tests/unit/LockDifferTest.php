@@ -25,9 +25,9 @@ class LockDifferTest extends Unit
     /**
      * @dataProvider casesDiff
      */
-    public function testDiff(array $expected, array $a, array $b)
+    public function testDiff(array $expected, array $lockA, array $lockB)
     {
         $lockDiffer = new LockDiffer();
-        $this->tester->assertSame($expected, $lockDiffer->diff($a, $b));
+        $this->tester->assertSame($expected, $lockDiffer->diff($lockA, $lockB));
     }
 }
