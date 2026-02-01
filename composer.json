@@ -21,12 +21,14 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "bin-dir": "bin",
         "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "sweetchuck/git-hooks": true
+        }
     },
     "require": {
         "php": ">=7.4",
@@ -59,7 +61,5 @@
             "Sweetchuck\\Robo\\Composer\\Tests\\Acceptance\\": "tests/acceptance/",
             "Sweetchuck\\Robo\\Composer\\Tests\\Unit\\": "tests/unit/"
         }
-    },
-    "scripts": {},
-    "scripts-descriptions": {}
+    }
 }
